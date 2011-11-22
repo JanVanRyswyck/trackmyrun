@@ -1,0 +1,45 @@
+!!!
+html
+	head
+		meta(charset='utf-8')
+		title Track My Run
+		link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+		link(rel='stylesheet', href='/stylesheets/trackmyrun.css')
+	body
+		.topbar
+			.topbar-inner
+				.container-fluid
+					a(class="brand", href="#") Track My Run
+					ul.nav
+						li.active	
+							a(href="#") Home
+						li.active
+							a(href="#") My Runs
+						li.active
+							a(href="#") My Shoes
+						li.active
+							a(href="#") Options
+		
+		.container-fluid
+			.sidebar
+				.well
+					h4 My Runs
+					ul
+						// TODO: replace with data from the DB!!
+						li
+							a(href="#") 2011
+						li
+							a(href="#") 2010
+					h4 My Shoes
+					ul
+						// TODO: replace with data from the DB!!
+						li
+							a(href="#") Brooks Addiction 9 AP - C
+						li
+							a(href="#") Brooks Addiction 9 AP - B
+			
+			.content
+				!=body
+			
+				footer
+					p Copyright © 2011 Jan Van Ryswyck.

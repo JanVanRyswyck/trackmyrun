@@ -1,0 +1,16 @@
+{
+  "name": "trackmyrun",
+  "description": "A small application for tracking information from workouts (running), written using Node.js",
+  "version": "0.1.0",
+  "author": "Jan Van Ryswyck (http://elegantcode.com)",
+  "directories": {
+    "public": "./public"
+  },
+  "engines": {
+    "node": ">= 0.6.0",
+    "jade": "0.17.0"
+  },
+  "dependencies": {
+    "express": "2.5.x"
+  }
+}
