@@ -1,14 +1,30 @@
-.hero-unit
-	h1 Track My Run
-	p Measure and improve your workouts
-.row
-	.span6
-		h2 Runs
-		p
-			|Create your very own activity log and follow up on your personal goals and milestones. Your activity allows you to track your
-			|pace, distance and heart rate after a run. Simple and effective activity tracking with no hassle.
-	.span6
-		h2 Shoes
-		p
-			|Running shoes are the most important pieces of equipment needed by any runner. Besides choosing the most suitable pair,
-			|keeping track of the wear of your running shoes is essential to prevent stress and overuse injuries.
+.sidebar
+	.well
+		h4 My Runs
+		ul
+			// TODO: replace with data from the DB!!
+			li
+				a(href="#") 2011
+			li
+				a(href="#") 2010
+		h4 My Shoes
+		ul
+			each shoe in shoesInUse
+				li
+					a(href="#") #{ shoe.name }
+
+.content
+	.hero-unit
+		h1 Track My Run
+		p Measure and improve your workouts
+	.row
+		.span6
+			h2 Runs
+			p
+				|Create your very own activity log and follow up on your personal goals and milestones. Your activity allows you to track your
+				|pace, distance and heart rate after a run. Simple and effective activity tracking with no hassle.
+		.span6
+			h2 Shoes
+			p
+				|Running shoes are the most important pieces of equipment needed by any runner. Besides choosing the most suitable pair,
+				|keeping track of the wear of your running shoes is essential to prevent stress and overuse injuries.

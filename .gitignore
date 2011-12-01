@@ -2,3 +2,5 @@
 .monitor
 .nodemonignore
 node_modules/
+config.json
+TODO
