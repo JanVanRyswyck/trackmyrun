@@ -2,10 +2,12 @@ express = require('express')
 cradle = require('cradle')
 configuration = require('./configuration')
 errors = require('./errors')
+routes = require('./routes')
 
 exports.bootstrap = (application) ->
 	bootstrapExpress(application)
 	bootstrapCouchDB()
+	routes.bootstrapFor(application)
 
 bootstrapExpress = (application) ->
 	application.set('view engine', 'jade')

@@ -2,11 +2,10 @@
 	.well
 		h4 My Runs
 		ul
-			// TODO: replace with data from the DB!!
-			li
-				a(href="#") 2011
-			li
-				a(href="#") 2010
+			each entry in numberOfRunsPerYear
+				li
+					a(href='#') #{ entry.year } (#{ entry.numberOfRuns })
+
 		h4 My Shoes
 		ul
 			each shoe in shoesInUse
