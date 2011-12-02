@@ -3,7 +3,7 @@ errors = require('./../errors')
 Runs = require('./../data/runs')
 Shoes = require('./../data/shoes')
 
-exports.index = (request, response)-> 
+exports.index = (request, response) -> 
 	step(
 		loadData = ->
 			runs = new Runs()

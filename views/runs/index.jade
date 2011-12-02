@@ -1,0 +1,38 @@
+.sidebar
+	.well
+		h4 Year
+		ul
+			each entry in numberOfRunsPerYear
+				li
+					a(href='/runs/#{entry.year}') #{entry.year} (#{entry.numberOfRuns})
+
+.content
+	.page-header
+		h1.inline-title My Runs in #{year}
+		span.top-command-buttons
+			button.btn.primary Add New Run
+	
+	table.zebra-striped
+		thead
+			tr
+				th Date
+				th Distance
+				th Duration
+				th Speed
+				th Avg. Heart Rate
+				th Shoes
+				th
+				th
+		tbody
+			each run in runs
+				tr
+					td #{run.date}
+					td #{run.distance}
+					td #{run.duration}
+					td #{run.speed}
+					td #{run.averageHeartRate}
+					td #{run.shoes}
+					td 
+						a(href='#') Edit
+					td 
+						a(href='#') Delete

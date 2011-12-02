@@ -12,7 +12,7 @@ module.exports = class Shoes
 	getShoesInUse: (callback) ->
 		_database.view('shoes/inUse', (error, response) ->
 			if error
-				callback(error)
+				return callback(error)
 
 			shoesInUse = _.map(response, 
 				(document) ->

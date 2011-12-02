@@ -7,7 +7,7 @@ module.exports = class Configuration
 		if !@settings
 			fileSystem.readFile('./config.json', 'utf8', (error, data) ->
 				if error
-					callback(error)
+					return callback(error)
 
 				@settings = JSON.parse data
 				callback(error, @settings.couchDB)
