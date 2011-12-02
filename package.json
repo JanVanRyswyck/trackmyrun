@@ -7,10 +7,13 @@
     "public": "./public"
   },
   "engines": {
-    "node": ">= 0.6.0",
-    "jade": "0.17.0"
+    "node": ">= 0.6.0"
   },
   "dependencies": {
-    "express": "2.5.x"
+    "express": "2.5.x",
+    "jade": "0.19.0",
+    "step": "0.0.5",
+    "underscore": "1.2.x",
+    "cradle": "0.5.7"
   }
 }
