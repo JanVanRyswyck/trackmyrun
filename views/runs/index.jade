@@ -10,7 +10,7 @@
 	.page-header
 		h1.inline-title My Runs in #{year}
 		span.top-command-buttons
-			button.btn.primary Add New Run
+			a.btn.primary(href='/runs/new') Add New Run
 	
 	table.zebra-striped
 		thead
@@ -28,7 +28,7 @@
 				tr
 					td #{run.date}
 					td #{run.distance}
-					td #{run.duration}
+					td #{run.duration.hours}h #{run.duration.minutes}min #{run.duration.seconds}sec
 					td #{run.speed}
 					td #{run.averageHeartRate}
 					td #{run.shoes}

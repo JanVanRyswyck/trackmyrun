@@ -1,0 +1,51 @@
+.container
+	.content
+		.page-header
+			h1.inline-title New Run
+				
+		form(method='post', action='/runs')
+			fieldset
+				div(class='clearfix' + (validationErrors.date ? ' error' : ''))
+					label(for='date') Date *
+					.input
+						input#date(type='text', name='date', class='span3', autocomplete='off', value=locals.date)
+						span.help-inline #{validationErrors.date}
+				div(class='clearfix' + (validationErrors.distance ? ' error' : ''))
+					label(for='distance') Distance *
+					.input
+						input#distance(type='text', name='distance', class='span2', autocomplete='off', value=locals.distance)
+						span.unit km
+						span.help-inline #{validationErrors.distance} 
+				div(class='clearfix' + (validationErrors.duration ? ' error' : ''))
+					label Duration *
+					.input
+						.inline-inputs
+							input#hours(type='text', name='durationHours', class='span1', autocomplete='off', value=locals.durationHours)
+							span.unit h
+							input#minutes(type='text', name='durationMinutes', class='span1', autocomplete='off', value=locals.durationMinutes)
+							span.unit min
+							input#seconds(type='text', name='durationSeconds', class='span1', autocomplete='off', value=locals.durationSeconds)
+							span.unit sec
+							span.help-inline #{validationErrors.duration}
+				div(class='clearfix')
+					label(for='averageHeartRate') Avg. Heart Rate
+					.input
+						input#averageHeartRate(type='text', name='averageHeartRate', class='span2', autocomplete='off')
+						span.unit bpm
+				div(class='clearfix' + (validationErrors.shoes ? ' error' : ''))
+					label(for='shoes') Shoes *
+					.input
+						select#shoes(name='shoes', class='span4')
+							option(value = -1) Select a pair of shoes ...
+							each pairOfShoes in shoesInUse
+								option(value = pairOfShoes.id, selected=(pairOfShoes.id == locals.shoes)) #{pairOfShoes.name}
+						span.help-inline #{validationErrors.shoes} 
+				div(class='clearfix')
+					label(for='comments') Comments
+					.input
+						textarea#comments(name='comments', class='span8', rows='4', autocomplete='off')
+						
+			.actions
+				button.btn.primary(type='submit') Submit
+				| 
+				button.btn(type='reset') Cancel

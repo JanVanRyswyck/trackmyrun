@@ -11,8 +11,12 @@ exports.bootstrap = (application) ->
 
 bootstrapExpress = (application) ->
 	application.set('view engine', 'jade')
+	application.use(express.bodyParser())
 	application.use(express.static(__dirname + '/public'))
 	application.use(express.errorHandler( dumpExceptions: true, showStack: true ))	
+	application.use(express.cookieParser())
+	application.use(express.session({ secret: 'fluppe' }))
+
 
 bootstrapCouchDB = ->
 	configuration.couchDBSettings((error, couchDB) -> 

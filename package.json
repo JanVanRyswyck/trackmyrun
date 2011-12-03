@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "express": "2.5.x",
+    "express-form": "0.6.x",
     "jade": "0.19.0",
     "step": "0.0.5",
     "underscore": "1.2.x",

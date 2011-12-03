@@ -2,12 +2,10 @@ step = require('step')
 errors = require('./../../errors')
 Runs = require('./../../data/runs')
 
-exports.index = (request, response, next) -> 
-	#TODO: Move to params handler
-	yearParam = request.params.year
-	year = parseInt(yearParam, 0) if yearParam
-	year = new Date().getFullYear() unless year
-
+#TODO: verify year parameter (optional)
+exports.index = (request, response) -> 
+	year = determineYearFrom(request)
+	
 	step(
 		loadData = ->
 			runs = new Runs()
@@ -24,3 +22,11 @@ exports.index = (request, response, next) ->
 				year: year 
 			)
 	)
+
+determineYearFrom = (request) ->
+	year = request.params.year
+	if(year)
+		parseInt(year, 0)
+	else	
+		new Date().getFullYear() 
+

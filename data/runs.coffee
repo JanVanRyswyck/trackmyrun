@@ -43,4 +43,11 @@ module.exports = class Runs
 				callback(error, runs)
 			)
 
+	add: (newRun) ->
+		_database.save(newRun, 
+			(error, response) -> 
+				console.log(error)
+				console.log(response)
+			)
+
 	
