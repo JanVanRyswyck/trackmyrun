@@ -1,21 +1,17 @@
-indexRoute = require('./routes/index').index
-indexRunsRoute = require('./routes/runs/index').index
-newRunRoute = require('./routes/runs/new').new
-createNewRunRoute = require('./routes/runs/new').create
 form = require('express-form')
 
-exports.bootstrapFor = (application) ->
-	application.get('/', indexRoute)
-	application.get('/runs/new', newRunRoute)
-	application.post('/runs', validation, createNewRunRoute)
-	application.get('/runs/:year?', indexRunsRoute)
-
-validation = form(
+exports.validate = form(
+	form.filter('date').trim()
 	form.validate('date')
 		.regex(/^(0[1-9]|[12][0-9]|3[01])[- //.](0[1-9]|1[012])[- //.](19|20)\d\d$/, 
 			   'Please specify a valid date (e.g. 15/01/2012).')
 
+	form.filter('distance').toFloat()
 	form.validate('distance').isNumeric('Please specify a valid distance.')
+
+	form.filter('durationHours').toInt()
+	form.filter('durationMinutes').toInt()
+	form.filter('durationSeconds').toInt()
 
 	customValidation = form.validate('duration')
 		.custom((value, source)-> 
@@ -30,13 +26,8 @@ validation = form(
 			validate(source.durationSeconds, 60)
 		)
 
-	form.validate('shoes').notRegex(/-1/, 'Please select a pair of shoes.')
-
-	form.filter('date').trim()
-	form.filter('distance').toFloat()
-	form.filter('durationHours').toInt()
-	form.filter('durationMinutes').toInt()
-	form.filter('durationSeconds').toInt()
 	form.filter('averageHeartRate').ifNull(0).toInt()
- 	form.filter('comments').ifNull('')
+
+	form.filter('comments').ifNull('')
+	form.validate('shoes').notRegex(/-1/, 'Please select a pair of shoes.')
 )

@@ -6,22 +6,6 @@ Shoes = require('./../../data/shoes')
 exports.new = (request, response) ->
 	renderViewForNewRun(response, {})
 
-renderViewForNewRun = (response, validationErrors) ->
-	step(
-		loadData = -> 
-			shoes = new Shoes()
-			shoes.getShoesInUse(@)
-
-		renderView = (error, shoesInUse) ->
-			if(error)
-				throw new errors.DataError('An error occured while loading data for the main index page.', error)
-
-			response.render('runs/new', 
-				validationErrors: validationErrors or {}
-				shoesInUse: shoesInUse or []
-			)
-	)
-
 exports.create = (request, response) ->
 	if not request.form.isValid		
 		renderViewForNewRun(response, request.form.getErrors())
@@ -40,6 +24,22 @@ exports.create = (request, response) ->
 	
 	runs = new Runs()	
 	runs.add(newRun)
+
+renderViewForNewRun = (response, validationErrors) ->
+	step(
+		loadData = -> 
+			shoes = new Shoes()
+			shoes.getShoesInUse(@)
+
+		renderView = (error, shoesInUse) ->
+			if(error)
+				throw new errors.DataError('An error occured while loading data for the main index page.', error)
+
+			response.render('runs/new', 
+				validationErrors: validationErrors or {}
+				shoesInUse: shoesInUse or []
+			)
+	)
 
 createDurationFrom = (requestForm) ->
 	hours: 	requestForm.durationHours

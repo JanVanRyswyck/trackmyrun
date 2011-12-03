@@ -2,12 +2,20 @@ express = require('express')
 cradle = require('cradle')
 configuration = require('./configuration')
 errors = require('./errors')
+_ = require('underscore')
+
 routes = require('./routes')
+routes.runs = _.extend(require('./routes/runs'), 
+					   require('./routes/runs/new'))
+
+validators = {}
+validators.newRun = require('./validators/newrun')
+
 
 exports.bootstrap = (application) ->
 	bootstrapExpress(application)
+	bootstrapRoutes(application)
 	bootstrapCouchDB()
-	routes.bootstrapFor(application)
 
 bootstrapExpress = (application) ->
 	application.set('view engine', 'jade')
@@ -17,6 +25,11 @@ bootstrapExpress = (application) ->
 	application.use(express.cookieParser())
 	application.use(express.session({ secret: 'fluppe' }))
 
+bootstrapRoutes = (application) ->
+	application.get('/', routes.index)
+	application.get('/runs/new', routes.runs.new)
+	application.post('/runs', validators.newRun.validate, routes.runs.create)
+	application.get('/runs/:year?', routes.runs.index)
 
 bootstrapCouchDB = ->
 	configuration.couchDBSettings((error, couchDB) -> 
