@@ -4,7 +4,7 @@ Runs = require('./../../data/runs')
 Shoes = require('./../../data/shoes')
 
 exports.new = (request, response) ->
-	renderViewForNewRun(response, {})
+	renderViewForNewRun(response)
 
 exports.create = (request, response) ->
 	if not request.form.isValid		
@@ -33,7 +33,7 @@ renderViewForNewRun = (response, validationErrors) ->
 
 		renderView = (error, shoesInUse) ->
 			if(error)
-				throw new errors.DataError('An error occured while loading data for the main index page.', error)
+				throw new errors.DataError('An error occured while loading data for the new run page.', error)
 
 			response.render('runs/new', 
 				validationErrors: validationErrors or {}

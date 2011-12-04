@@ -2,7 +2,6 @@ step = require('step')
 errors = require('./../../errors')
 Runs = require('./../../data/runs')
 
-#TODO: verify year parameter (optional)
 exports.index = (request, response) -> 
 	year = determineYearFrom(request)
 	
