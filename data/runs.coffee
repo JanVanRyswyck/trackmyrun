@@ -35,6 +35,7 @@ module.exports = class Runs
 						date: document.value.date
 						distance: document.value.distance
 						duration: document.value.duration
+						id: document.value._id
 						speed: document.value.speed
 						averageHeartRate: document.value.averageHeartRate
 						shoes: document.value.shoes

@@ -6,7 +6,8 @@ _ = require('underscore')
 
 routes = require('./routes')
 routes.runs = _.extend(require('./routes/runs'), 
-					   require('./routes/runs/new'))
+					   require('./routes/runs/new'),
+					   require('./routes/runs/edit'))
 
 validators = {}
 validators.newRun = require('./validators/newrun')
@@ -29,7 +30,8 @@ bootstrapRoutes = (application) ->
 	application.get('/', routes.index)
 	application.get('/runs/new', routes.runs.new)
 	application.post('/runs', validators.newRun.validate, routes.runs.create)
-	application.get('/runs/:year?', routes.runs.index)
+	application.get('/runs/:year([0-9]{4})?', routes.runs.index)
+	application.get('/runs/:id([a-z0-9]{32})', routes.runs.edit)
 
 bootstrapCouchDB = ->
 	configuration.couchDBSettings((error, couchDB) -> 
