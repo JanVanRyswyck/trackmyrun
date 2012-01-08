@@ -29,16 +29,15 @@ bootstrapExpress = (application) ->
 
 bootstrapRoutes = (application) ->
 	application.get('/', routes.index)
-	application.get('/runs/new', routes.runs.new)
 	application.post('/runs', validators.run.validate, routes.runs.create)
+	application.get('/runs/new', routes.runs.new)
 	application.get('/runs/:year([0-9]{4})?', routes.runs.index)
 	application.put('/runs/:id([a-z0-9]{32})', validators.run.validate, routes.runs.update)
 	application.get('/runs/:id([a-z0-9]{32})', routes.runs.edit)
 
-
 bootstrapCouchDB = ->
 	configuration.couchDBSettings((error, couchDB) -> 
-		if(error)
+		if error
 			throw new errors.ConfigurationError('An error occured while reading the configuration settings for the CouchDB database.', error)
 
 		cradle.setup(

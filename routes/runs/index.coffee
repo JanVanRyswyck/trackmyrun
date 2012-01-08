@@ -1,6 +1,6 @@
 step = require('step')
-errors = require('./../../errors')
-Runs = require('./../../data/runs')
+errors = require('../../errors')
+Runs = require('../../data/runs')
 
 exports.index = (request, response) -> 
 	year = determineYearFrom(request)
@@ -12,7 +12,7 @@ exports.index = (request, response) ->
 			runs.getRunsByYear(year, @.parallel())
 
 		renderView = (error, numberOfRunsPerYear, runs) ->
-			if(error)
+			if error
 				throw new errors.DataError('An error occured while loading data for the index page (runs).', error)
 
 			response.render('runs/index',
@@ -24,7 +24,7 @@ exports.index = (request, response) ->
 
 determineYearFrom = (request) ->
 	year = request.params.year
-	if(year)
+	if year
 		parseInt(year, 0)
 	else	
 		new Date().getFullYear() 

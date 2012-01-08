@@ -1,7 +1,7 @@
 cradle = require('cradle')
 connectionManager = require('./connectionmanager')
-errors = require('./../errors')
-RunMapper = require('./runmapper')
+errors = require('../errors')
+DocumentToRunMapper = require('./runmapper')
 _ = require('underscore')
 
 module.exports = class Runs
@@ -11,11 +11,11 @@ module.exports = class Runs
 	constructor: ->
 		connection = connectionManager.getConnection()
 		_database = connection.database('trackmyrun')
-		_runMapper = new RunMapper()
+		_runMapper = new DocumentToRunMapper()
 
 	getById: (id, callback) ->
 		_database.get(id, (error, response) ->
-			if(error)
+			if error
 				return callback(error)	
 			
 			run = _runMapper.mapFrom(response)	
@@ -40,7 +40,7 @@ module.exports = class Runs
 	getRunsByYear: (year, callback) ->
 		_database.view('runs/runsByYear', { key: year }
 			(error, response) ->
-				if(error)
+				if error
 					return callback(error)
 
 				runs = _.map(response, 
@@ -53,7 +53,7 @@ module.exports = class Runs
 	save: (run, callback) ->
 		_database.save(run.id, run.revision, run, 
 			(error, response) -> 
-				if(error)
+				if error
 					callback(error)
 				
 				callback(error, 

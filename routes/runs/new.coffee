@@ -1,8 +1,10 @@
 step = require('step')
-errors = require('./../../errors')
-_ = require('underscore')
-Runs = require('./../../data/runs')
-Shoes = require('./../../data/shoes')
+errors = require('../../errors')
+RunFactory = require('../../factories/runfactory')
+FormDataToRunMapper = require('../../mappers/runmapper')
+Runs = require('../../data/runs')
+Shoes = require('../../data/shoes')
+Calculator = require('../../services/calculator')
 
 exports.new = (request, response) ->
 	renderViewForNewRun(response)
@@ -14,8 +16,8 @@ exports.create = (request, response) ->
 
 	step(
 		createRun = () ->
-			newRun = mapRunFromInput(request.form)
-			newRun.speed = calculateSpeedFor(newRun)
+			newRun = new FormDataToRunMapper().mapFrom(request.form)
+			newRun.speed = new Calculator().calculateSpeedFor(newRun)
 			
 			runs = new Runs()	
 			runs.save(newRun, @)
@@ -37,9 +39,9 @@ renderViewForNewRun = (response, validationErrors) ->
 			if error 
 				throw new errors.DataError('An error occured while loading data for the new run page.', error)
 
-			run = createDefaultRun()
+			run = new RunFactory().createDefault()
 			if validationErrors
-				run = mapRunFromInput(response.locals())
+				run = new FormDataToRunMapper().mapFrom(response.locals())
 						
 			response.render('runs/new',
 				run: run
@@ -47,35 +49,3 @@ renderViewForNewRun = (response, validationErrors) ->
 				validationErrors: validationErrors or {}
 			)
 	)
-
-# TODO: Create factory
-createDefaultRun = () ->
-	type: 'run'
-	date: _.getCurrentDate()
-	distance: ''
-	duration:
-		hours: ''
-		minutes: ''
-		seconds: ''
-	averageHeartRate: ''
-	shoes: -1
-	comments: ''
-
-mapRunFromInput = (formData) ->
-	type: 'run'
-	date: formData.date
-	distance: formData.distance
-	duration: createDurationFrom(formData)
-	averageHeartRate : formData.averageHeartRate
-	shoes: formData.shoes		
-	comments: formData.comments
-
-createDurationFrom = (formData) ->
-	hours: 	formData.durationHours
-	minutes: formData.durationMinutes
-	seconds: formData.durationSeconds
-
-calculateSpeedFor = (newRun) -> 
-	durationInSeconds = (newRun.duration.hours * 3600) + (newRun.duration.minutes * 60) + newRun.duration.seconds
-	speed = (newRun.distance / durationInSeconds) * 3600
-	return parseFloat(speed.toFixed(2))

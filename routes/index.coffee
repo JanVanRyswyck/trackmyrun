@@ -1,7 +1,7 @@
 step = require('step')
-errors = require('./../errors')
-Runs = require('./../data/runs')
-Shoes = require('./../data/shoes')
+errors = require('../errors')
+Runs = require('../data/runs')
+Shoes = require('../data/shoes')
 
 exports.index = (request, response) -> 
 	step(
@@ -13,7 +13,7 @@ exports.index = (request, response) ->
 			shoes.getShoesInUse(@.parallel())
 
 		renderView = (error, numberOfRunsPerYear, shoesInUse) ->
-			if(error)
+			if error
 				throw new errors.DataError('An error occured while loading data for the main index page.', error)
 
 			response.render('index',

@@ -1,4 +1,4 @@
-module.exports = class RunMapper
+module.exports = class DocumentToRunMapper
 	mapFrom: (document) ->
 		id: document._id
 		revision: document._rev
