@@ -3,8 +3,8 @@ form = require('express-form')
 exports.validate = form(
 	form.filter('date').trim()
 	form.validate('date')
-		.regex(/^(0[1-9]|[12][0-9]|3[01])[- //.](0[1-9]|1[012])[- //.](19|20)\d\d$/, 
-			   'Please specify a valid date (e.g. 15/01/2012).')
+		.regex(/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/, 
+			   'Please specify a valid date (e.g. 2012-01-15).')
 
 	form.filter('distance').toFloat()
 	form.validate('distance').isNumeric('Please specify a valid distance.')
@@ -27,7 +27,6 @@ exports.validate = form(
 		)
 
 	form.filter('averageHeartRate').ifNull(0).toInt()
-
-	form.filter('comments').ifNull('')
 	form.validate('shoes').notRegex(/-1/, 'Please select a pair of shoes.')
+	form.filter('comments').ifNull('')
 )

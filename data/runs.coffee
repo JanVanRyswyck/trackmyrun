@@ -1,5 +1,6 @@
 cradle = require('cradle')
 connectionManager = require('./connectionmanager')
+errors = require('./../errors')
 RunMapper = require('./runmapper')
 _ = require('underscore')
 
@@ -49,9 +50,14 @@ module.exports = class Runs
 				callback(error, runs)
 			)
 
-	add: (newRun) ->
-		_database.save(newRun, 
+	save: (run, callback) ->
+		_database.save(run.id, run.revision, run, 
 			(error, response) -> 
-				console.log(error)
-				console.log(response)
+				if(error)
+					callback(error)
+				
+				callback(error, 
+					id: response.id
+					revision: response.revision
+				)
 			)

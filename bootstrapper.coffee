@@ -10,7 +10,7 @@ routes.runs = _.extend(require('./routes/runs'),
 					   require('./routes/runs/edit'))
 
 validators = {}
-validators.newRun = require('./validators/newrun')
+validators.run = require('./validators/run')
 
 
 exports.bootstrap = (application) ->
@@ -21,6 +21,7 @@ exports.bootstrap = (application) ->
 bootstrapExpress = (application) ->
 	application.set('view engine', 'jade')
 	application.use(express.bodyParser())
+	application.use(express.methodOverride())
 	application.use(express.static(__dirname + '/public'))
 	application.use(express.errorHandler( dumpExceptions: true, showStack: true ))	
 	application.use(express.cookieParser())
@@ -29,9 +30,11 @@ bootstrapExpress = (application) ->
 bootstrapRoutes = (application) ->
 	application.get('/', routes.index)
 	application.get('/runs/new', routes.runs.new)
-	application.post('/runs', validators.newRun.validate, routes.runs.create)
+	application.post('/runs', validators.run.validate, routes.runs.create)
 	application.get('/runs/:year([0-9]{4})?', routes.runs.index)
+	application.put('/runs/:id([a-z0-9]{32})', validators.run.validate, routes.runs.update)
 	application.get('/runs/:id([a-z0-9]{32})', routes.runs.edit)
+
 
 bootstrapCouchDB = ->
 	configuration.couchDBSettings((error, couchDB) -> 

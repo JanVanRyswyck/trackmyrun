@@ -1,5 +1,6 @@
 bootstrapper = require('./bootstrapper')
 express = require('express')
+require('./extensions')
 
 application = express.createServer()
 
