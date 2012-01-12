@@ -42,7 +42,7 @@ renderViewForEditRun = (runId, response, validationErrors) ->
 	step(
 		loadData = ->
 			shoes = new Shoes()
-			shoes.getShoesInUse(@.parallel())
+			shoes.getAll(@.parallel())
 
 			if not validationErrors
 				runs = new Runs() 

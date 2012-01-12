@@ -1,8 +1,9 @@
 express = require('express')
 cradle = require('cradle')
+_ = require('underscore')
 configuration = require('./configuration')
 errors = require('./errors')
-_ = require('underscore')
+viewHelpers = require('./views/viewhelpers')
 
 routes = require('./routes')
 routes.runs = _.extend(require('./routes/runs'), 
@@ -26,6 +27,7 @@ bootstrapExpress = (application) ->
 	application.use(express.errorHandler( dumpExceptions: true, showStack: true ))	
 	application.use(express.cookieParser())
 	application.use(express.session({ secret: 'fluppe' }))
+	application.helpers(viewHelpers)
 
 bootstrapRoutes = (application) ->
 	application.get('/', routes.index)

@@ -1,24 +1,21 @@
 cradle = require('cradle')
 connectionManager = require('./connectionmanager')
 errors = require('../errors')
-DocumentToRunMapper = require('./runmapper')
 _ = require('underscore')
 
 module.exports = class Runs
 	_database = null
-	_runMapper = null
 
 	constructor: ->
 		connection = connectionManager.getConnection()
 		_database = connection.database('trackmyrun')
-		_runMapper = new DocumentToRunMapper()
 
 	getById: (id, callback) ->
 		_database.get(id, (error, response) ->
 			if error
 				return callback(error)	
 			
-			run = _runMapper.mapFrom(response)	
+			run = mapFrom(response)	
 			callback(error, run)
 		)
 
@@ -28,8 +25,7 @@ module.exports = class Runs
 				if error
 					return callback(error)
 
-				runsPerYear = _.map(response, 
-					(document) ->
+				runsPerYear = _(response).map((document) ->
 						year: document.key
 						numberOfRuns: document.value
 				)
@@ -43,9 +39,8 @@ module.exports = class Runs
 				if error
 					return callback(error)
 
-				runs = _.map(response, 
-					(document) -> _runMapper.mapFrom(document.value)	
-				)
+				runs = _(response).map((document) -> 
+					mapFrom(document.value))
 
 				callback(error, runs)
 			)
@@ -61,3 +56,14 @@ module.exports = class Runs
 					revision: response.revision
 				)
 			)
+
+	mapFrom = (document) ->
+		id: document._id
+		revision: document._rev
+		type: document.type
+		date: document.date
+		distance: document.distance
+		duration: document.duration
+		speed: document.speed
+		averageHeartRate: document.averageHeartRate
+		shoes: document.shoes

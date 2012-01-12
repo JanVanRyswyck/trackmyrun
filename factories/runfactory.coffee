@@ -9,6 +9,6 @@ module.exports = class RunFactory
 			hours: ''
 			minutes: ''
 			seconds: ''
-		averageHeartRate: ''
+		averageHeartRate: 0
 		shoes: -1
 		comments: ''

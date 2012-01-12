@@ -1,4 +1,5 @@
 form = require('express-form')
+_ = require('underscore')
 
 exports.validate = form(
 	form.filter('date').trim()
@@ -18,8 +19,8 @@ exports.validate = form(
 			validate = (durationFieldValue, maxValue) ->
 				throw new Error('Please specify a valid duration.') unless durationFieldValue
 				
-				value = parseInt(durationFieldValue)	
-				throw new Error('Please specify a valid values for the duration.') unless value and 0 < value < maxValue
+				value = parseInt(durationFieldValue)
+				throw new Error('Please specify valid values for the duration.') unless _(value).isNaN and 0 <= value < maxValue
 			
 			validate(source.durationHours, 24)
 			validate(source.durationMinutes, 60)

@@ -31,7 +31,7 @@
 					td #{run.duration.hours}h #{run.duration.minutes}min #{run.duration.seconds}sec
 					td #{run.speed}
 					td #{run.averageHeartRate}
-					td #{run.shoes}
+					td #{shoeNameFor(run.shoes, shoes)} 
 					td 
 						a(href='/runs/#{run.id}') Edit
 					td 
