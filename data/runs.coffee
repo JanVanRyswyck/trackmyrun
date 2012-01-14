@@ -50,6 +50,8 @@ module.exports = class Runs
 			)
 
 	save: (run, callback) ->
+		run['type'] = 'run'
+		
 		_database.save(run.id, run.revision, run, 
 			(error, response) -> 
 				if error
@@ -64,7 +66,6 @@ module.exports = class Runs
 	mapFrom = (document) ->
 		id: document._id
 		revision: document._rev
-		type: document.type
 		date: document.date
 		distance: document.distance
 		duration: document.duration

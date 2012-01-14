@@ -1,6 +1,5 @@
 module.exports = class FormDataToRunMapper
 	mapFrom: (formData) ->
-		type: 'run'
 		date: formData.date
 		distance: formData.distance
 		duration: @.mapDurationFrom(formData)
