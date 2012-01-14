@@ -1,0 +1,47 @@
+.sidebar
+	.well
+		h4 Active Pair of Shoes
+		ul
+			each shoe in shoes
+				if shoe.inUse
+					li #{shoe.name}
+
+.content
+	.page-header
+		h1.inline-title My Shoes
+		span.top-command-buttons
+			a.btn.primary(href='/shoes/new') Add New Pair of Shoes
+	
+	table.zebra-striped
+		thead
+			tr
+				th Name
+				th Size
+				th Color
+				th Purchase Date
+				th Distance
+				th In use
+				th Status
+				th
+				th
+		tbody
+			each shoe in shoes
+				tr
+					td #{shoe.name}
+					td #{shoe.size}
+					td #{shoe.color}
+					td #{shoe.purchaseDate}
+					td #{shoe.distance}
+
+					if shoe.inUse
+						td
+							input(type='checkbox', disabled, checked='checked')
+					else
+						td 
+							input(type='checkbox', disabled)
+
+					td #{shoe.status} 
+					td 
+						a(href='/shoes/#{shoe.id}') Edit
+					td 
+						a(href='#') Delete

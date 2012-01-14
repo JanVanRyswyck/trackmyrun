@@ -31,8 +31,11 @@ module.exports = class Shoes
 
 	mapFrom = (document) ->
 		id: document._id
+		revision: document._rev
+		color: document.color
+		distance: document.distance
+		inUse: document.inUse
 		name: document.name
-
-
-
-	
+		purchaseDate: document.purchaseDate
+		size: document.size
+		status: document.status
