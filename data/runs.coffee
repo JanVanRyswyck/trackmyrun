@@ -34,9 +34,13 @@ module.exports = class Runs
 			)
 
 	getRunsByYear: (year, callback) ->
-		_database.view('runs/runsByYear', { key: year }
+		startDate = year + '-12-31'
+		endDate = year + '-01-01'
+
+		_database.view('runs/runsByYear', { startkey: startDate, endkey: endDate, descending: true }
 			(error, response) ->
 				if error
+					console.log error
 					return callback(error)
 
 				runs = _(response).map((document) -> 

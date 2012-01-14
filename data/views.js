@@ -6,9 +6,12 @@
    "_rev": "4-526c00b7c1f8f8e06e21db43f82999af",
    "language": "javascript",
    "views": {
-       "inUse": {
-           "map": "function (document) {\n            if (document.type === 'shoe' && document.inUse) {\n              return emit(document._id, document);\n            }\n          }"
-       }
+      "all": {
+       "map": "function (document) {\n            if (document.type === 'shoe') {\n              return emit(document.purchaseDate, document);\n            }\n          }" 
+      },
+      "inUse": {
+           "map": "function (document) {\n            if (document.type === 'shoe' && document.inUse) {\n              return emit(document.purchaseDate, document);\n            }\n          }"
+      }
    }
 }
 
@@ -25,7 +28,7 @@
           "reduce": "function(keys, values, rereduce) {\n  return values.length;\n}"
       },
       "runsByYear": {
-          "map": "function(document) {\n    if(document.type === 'run') {\n\tvar date = new Date(document.date);\n\temit(date.getFullYear(), document);\n    }\n  \t\n}"
+          "map": "function(document) {\n    if(document.type === 'run') {\n\tvar date = new Date(document.date);\n\temit(date, document);\n    }\n  \t\n}"
       }
    }
 }
