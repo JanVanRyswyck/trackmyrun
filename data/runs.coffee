@@ -13,24 +13,24 @@ module.exports = class Runs
 	getById: (id, callback) ->
 		_database.get(id, (error, response) ->
 			if error
-				return callback(error)	
+				return process.nextTick(-> callback(error))	
 			
 			run = mapFrom(response)	
-			callback(error, run)
+			process.nextTick(-> callback(error, run))
 		)
 
 	getNumberOfRunsPerYear: (callback) ->
 		_database.view('runs/runCountPerYear',  { group: true, descending: true }, 
 			(error, response) ->
 				if error
-					return callback(error)
+					return process.nextTick(-> callback(error))
 
 				runsPerYear = _(response).map((document) ->
 						year: document.key
 						numberOfRuns: document.value
 				)
 			
-				callback(error, runsPerYear)
+				process.nextTick(-> callback(error, runsPerYear))
 			)
 
 	getRunsByYear: (year, callback) ->
@@ -41,12 +41,12 @@ module.exports = class Runs
 			(error, response) ->
 				if error
 					console.log error
-					return callback(error)
+					return process.nextTick(-> callback(error))
 
 				runs = _(response).map((document) -> 
 					mapFrom(document.value))
 
-				callback(error, runs)
+				process.nextTick(-> callback(error, runs))
 			)
 
 	save: (run, callback) ->
@@ -55,12 +55,12 @@ module.exports = class Runs
 		_database.save(run.id, run.revision, run, 
 			(error, response) -> 
 				if error
-					callback(error)
+					process.nextTick(-> callback(error))
 				
-				callback(error, 
+				process.nextTick(-> callback(error, 
 					id: response.id
 					revision: response.revision
-				)
+				))
 			)
 
 	mapFrom = (document) ->

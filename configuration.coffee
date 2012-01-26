@@ -7,10 +7,11 @@ module.exports = class Configuration
 		if !@settings
 			fileSystem.readFile('./config.json', 'utf8', (error, data) ->
 				if error
-					return callback(error)
+					process.nextTick(-> callback(error))
 
-				@settings = JSON.parse data
-				callback(error, @settings.couchDB)
+				@settings = JSON.parse(data)
+				
+				process.nextTick(=> callback(error, @settings.couchDB))
 			)
 		else
-			callback(error, @settings.couchDB)
+			process.nextTick(=> callback(error, @settings.couchDB))
