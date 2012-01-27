@@ -1,0 +1,7 @@
+.container
+	.content
+		.page-header
+			h1.inline-title New Pair of Shoes
+				
+		form(method='post', action='/shoes')
+			!=partial('shoefields', { shoes: shoes, validationErrors: validationErrors })

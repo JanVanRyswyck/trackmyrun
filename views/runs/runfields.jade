@@ -4,12 +4,14 @@ fieldset
 		.input
 			input#date(type='text', name='date', class='span3', autocomplete='off', value=run.date)
 			span.help-inline #{validationErrors.date}
+
 	div(class='clearfix' + (validationErrors.distance ? ' error' : ''))
 		label(for='distance') Distance *
 		.input
 			input#distance(type='text', name='distance', class='span2', autocomplete='off', value=run.distance)
 			span.unit km
 			span.help-inline #{validationErrors.distance} 
+
 	div(class='clearfix' + (validationErrors.duration ? ' error' : ''))
 		label Duration *
 		.input
@@ -21,11 +23,13 @@ fieldset
 				input#seconds(type='text', name='durationSeconds', class='span1', autocomplete='off', value=run.duration.seconds)
 				span.unit sec
 				span.help-inline #{validationErrors.duration}
+
 	div(class='clearfix')
 		label(for='averageHeartRate') Avg. Heart Rate
 		.input
 			input#averageHeartRate(type='text', name='averageHeartRate', class='span2', autocomplete='off', value=run.averageHeartRate)
 			span.unit bpm
+
 	div(class='clearfix' + (validationErrors.shoes ? ' error' : ''))
 		label(for='shoes') Shoes *
 		.input
@@ -34,10 +38,11 @@ fieldset
 				each pairOfShoes in shoesInUse
 					option(value = pairOfShoes.id, selected=(pairOfShoes.id == run.shoes)) #{pairOfShoes.name}
 			span.help-inline #{validationErrors.shoes} 
+	
 	div(class='clearfix')
 		label(for='comments') Comments
 		.input
-			textarea#comments(name='comments', class='span8', rows='4', autocomplete='off', value=run.comments)
+			textarea#comments(name='comments', class='span8', rows='4', autocomplete='off') #{run.comments}
 			
 .actions
 	button.btn.primary(type='submit') Submit

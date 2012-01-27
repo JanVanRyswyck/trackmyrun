@@ -28,6 +28,20 @@ module.exports = class Shoes
 				process.nextTick(-> callback(error, shoesInUse))
 			)
 
+	save: (shoes, callback) ->
+		shoes['type'] = 'shoe'
+		
+		_database.save(shoes.id, shoes.revision, shoes, 
+			(error, response) -> 
+				if error
+					process.nextTick(-> callback(error))
+				
+				process.nextTick(-> callback(error, 
+					id: response.id
+					revision: response.revision
+				))
+			)
+
 	mapFrom = (document) ->
 		id: document._id
 		revision: document._rev

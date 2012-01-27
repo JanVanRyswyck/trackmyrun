@@ -1,6 +1,5 @@
 step = require('step')
 errors = require('../../errors')
-FormDataToRunMapper = require('../../mappers/runmapper')
 Runs = require('../../data/runs')
 Shoes = require('../../data/shoes')
 Calculator = require('../../services/calculator')
@@ -17,7 +16,6 @@ exports.update = (request, response) ->
 		return
 
 	runs = new Runs() 
-
 	step(
 		getRun = ->
 			runs.getById(runId, @)
@@ -53,8 +51,10 @@ renderViewForEditRun = (runId, response, validationErrors) ->
 				throw new errors.DataError('An error occured while loading data for the edit run page.', error)
 
 			if validationErrors
-				run = new FormDataToRunMapper().mapFrom(response.locals())
+				run = mapRunFrom(response.locals())
 				run['id'] = runId
+
+			console.log run
 
 			response.render('runs/edit', 
 				run: run
@@ -66,7 +66,20 @@ renderViewForEditRun = (runId, response, validationErrors) ->
 applyChangesTo = (run, formData) ->
 	run.date = formData.date
 	run.distance = formData.distance
-	run.duration = new FormDataToRunMapper().mapDurationFrom(formData)
+	run.duration = mapDurationFrom(formData)
 	run.averageHeartRate = formData.averageHeartRate
 	run.shoes = formData.shoes
 	run.comments = formData.comments
+
+mapRunFrom = (formData) ->
+	date: formData.date
+	distance: formData.distance
+	duration: mapDurationFrom(formData)
+	averageHeartRate: formData.averageHeartRate
+	shoes: formData.shoes		
+	comments: formData.comments
+
+mapDurationFrom = (formData) ->
+	hours: 	formData.durationHours
+	minutes: formData.durationMinutes
+	seconds: formData.durationSeconds

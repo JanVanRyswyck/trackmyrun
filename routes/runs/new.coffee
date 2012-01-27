@@ -1,7 +1,6 @@
 step = require('step')
+_ = require('underscore')
 errors = require('../../errors')
-RunFactory = require('../../factories/runfactory')
-FormDataToRunMapper = require('../../mappers/runmapper')
 Runs = require('../../data/runs')
 Shoes = require('../../data/shoes')
 Calculator = require('../../services/calculator')
@@ -16,7 +15,7 @@ exports.create = (request, response) ->
 
 	step(
 		createRun = () ->
-			newRun = new FormDataToRunMapper().mapFrom(request.form)
+			newRun = mapNewRunFrom(request.form)
 			newRun.speed = new Calculator().calculateSpeedFor(newRun)
 			
 			runs = new Runs()	
@@ -39,9 +38,9 @@ renderViewForNewRun = (response, validationErrors) ->
 			if error 
 				throw new errors.DataError('An error occured while loading data for the new run page.', error)
 
-			run = new RunFactory().createDefault()
+			run = createDefaultRun()
 			if validationErrors
-				run = new FormDataToRunMapper().mapFrom(response.locals())
+				run = mapNewRunFrom(response.locals())
 						
 			response.render('runs/new',
 				run: run
@@ -49,3 +48,25 @@ renderViewForNewRun = (response, validationErrors) ->
 				validationErrors: validationErrors or {}
 			)
 	)
+
+createDefaultRun = () ->
+	date: _.getCurrentDate()
+	distance: ''
+	duration:
+		hours: ''
+		minutes: ''
+		seconds: ''
+	averageHeartRate: 0
+	shoes: -1
+	comments: ''
+
+mapNewRunFrom = (formData) ->
+	date: formData.date
+	distance: formData.distance
+	duration:
+		hours: 	formData.durationHours
+		minutes: formData.durationMinutes
+		seconds: formData.durationSeconds
+	averageHeartRate: formData.averageHeartRate
+	shoes: formData.shoes		
+	comments: formData.comments

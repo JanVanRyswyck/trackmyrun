@@ -66,9 +66,10 @@ module.exports = class Runs
 	mapFrom = (document) ->
 		id: document._id
 		revision: document._rev
+		averageHeartRate: document.averageHeartRate
+		comments: document.comments
 		date: document.date
 		distance: document.distance
 		duration: document.duration
-		speed: document.speed
-		averageHeartRate: document.averageHeartRate
 		shoes: document.shoes
+		speed: document.speed

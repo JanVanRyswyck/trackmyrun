@@ -1,0 +1,28 @@
+fieldset
+	div(class='clearfix' + (validationErrors.name ? ' error' : ''))
+		label(for='name') Name *
+		.input
+			input#name(type='text', name='name', class='span5', autocomplete='off', value=shoes.name)
+			span.help-inline #{validationErrors.name}
+
+	div(class='clearfix' + (validationErrors.size ? ' error' : ''))
+		label(for='size') Size *
+		.input
+			input#size(type='text', name='size', class='span2', autocomplete='off', value=shoes.size)
+			span.help-inline #{validationErrors.size} 
+
+	div(class='clearfix')
+		label(for='color') Color
+		.input
+			input#color(type='text', name='color', class='span3', autocomplete='off', value=shoes.color)
+
+	div(class='clearfix' + (validationErrors.purchaseDate ? ' error' : ''))
+		label(for='purchaseDate') Purchase Date *
+		.input
+			input#date(type='text', name='purchaseDate', class='span3', autocomplete='off', value=shoes.purchaseDate)
+			span.help-inline #{validationErrors.purchaseDate}
+			
+.actions
+	button.btn.primary(type='submit') Submit
+	| 
+	a.btn(href='/runs') Cancel
