@@ -27,3 +27,7 @@ span.unit {
 	*top: -5px;
 	/* IE6-7 */
 }
+
+input[type=checkbox] {
+	margin: 8px 0;
+}

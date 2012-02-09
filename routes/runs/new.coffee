@@ -10,8 +10,7 @@ exports.new = (request, response) ->
 
 exports.create = (request, response) ->
 	if not request.form.isValid		
-		renderViewForNewRun(response, request.form.getErrors())
-		return
+		return renderViewForNewRun(response, request.form.getErrors())
 
 	step(
 		createRun = () ->
@@ -37,14 +36,12 @@ renderViewForNewRun = (response, validationErrors) ->
 		renderView = (error, shoesInUse) ->
 			if error 
 				throw new errors.DataError('An error occured while loading data for the new run page.', error)
-
-			run = createDefaultRun()
-			if validationErrors
-				run = mapNewRunFrom(response.locals())
+				
+			run = if validationErrors then mapNewRunFrom(response.locals()) else createDefaultRun()
 						
 			response.render('runs/new',
 				run: run
-				shoesInUse: shoesInUse or []
+				pairsOfShoes: shoesInUse or []
 				validationErrors: validationErrors or {}
 			)
 	)

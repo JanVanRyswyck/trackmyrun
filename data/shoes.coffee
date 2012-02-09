@@ -9,6 +9,15 @@ module.exports = class Shoes
 		connection = connectionManager.getConnection()
 		_database = connection.database('trackmyrun')
 
+	getById: (id, callback) ->
+		_database.get(id, (error, response) ->
+			if error
+				return process.nextTick(-> callback(error))	
+			
+			shoes = mapFrom(response)	
+			process.nextTick(-> callback(error, shoes))
+		)
+
 	getAll: (callback) ->
 		_database.view('shoes/all', { descending: true }, 
 			(error, response) ->
@@ -30,7 +39,7 @@ module.exports = class Shoes
 
 	save: (shoes, callback) ->
 		shoes['type'] = 'shoe'
-		
+
 		_database.save(shoes.id, shoes.revision, shoes, 
 			(error, response) -> 
 				if error

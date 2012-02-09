@@ -35,7 +35,7 @@ fieldset
 		.input
 			select#shoes(name='shoes', class='span4')
 				option(value = -1) Select a pair of shoes ...
-				each pairOfShoes in shoesInUse
+				each pairOfShoes in pairsOfShoes
 					option(value = pairOfShoes.id, selected=(pairOfShoes.id == run.shoes)) #{pairOfShoes.name}
 			span.help-inline #{validationErrors.shoes} 
 	
@@ -43,8 +43,3 @@ fieldset
 		label(for='comments') Comments
 		.input
 			textarea#comments(name='comments', class='span8', rows='4', autocomplete='off') #{run.comments}
-			
-.actions
-	button.btn.primary(type='submit') Submit
-	| 
-	a.btn(href='/runs') Cancel

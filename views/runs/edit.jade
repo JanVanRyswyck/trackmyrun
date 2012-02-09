@@ -3,6 +3,11 @@
 		.page-header
 			h1.inline-title Edit Run
 
-		form(method='post', action='/runs/#{ run.id }')
+		form(method='post', action='/runs/#{run.id}')
 			input(name='_method', value='PUT', type='hidden')
-			!=partial('runfields', { run: run, shoesInUse: shoesInUse, validationErrors: validationErrors })
+			!=partial('runfields', { run: run, pairsOfShoes: pairsOfShoes, validationErrors: validationErrors })
+
+			.actions
+				button.btn.primary(type='submit') Save
+				| 
+				a.btn(href='/runs') Cancel

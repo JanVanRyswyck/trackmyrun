@@ -5,3 +5,8 @@
 				
 		form(method='post', action='/shoes')
 			!=partial('shoefields', { shoes: shoes, validationErrors: validationErrors })
+
+			.actions
+				button.btn.primary(type='submit') Submit
+				| 
+				a.btn(href='/shoes') Cancel

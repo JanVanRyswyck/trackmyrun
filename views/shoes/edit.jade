@@ -1,0 +1,18 @@
+.container
+	.content
+		.page-header
+			h1.inline-title Edit Pair of Shoes
+
+		form(method='post', action='/shoes/#{shoes.id}')
+			input(name='_method', value='PUT', type='hidden')
+			!=partial('shoefields', { shoes: shoes, validationErrors: validationErrors })
+
+			div(class='clearfix')
+				label(for='inUse') In use
+				.input
+					input#inUse(type='checkbox', name='inUse', checked=shoes.inUse)	
+
+			.actions
+				button.btn.primary(type='submit') Save
+				| 
+				a.btn(href='/shoes') Cancel

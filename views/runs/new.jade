@@ -4,4 +4,9 @@
 			h1.inline-title New Run
 				
 		form(method='post', action='/runs')
-			!=partial('runfields', { run: run, shoesInUse: shoesInUse, validationErrors: validationErrors })
+			!=partial('runfields', { run: run, pairsOfShoes: pairsOfShoes, validationErrors: validationErrors })
+
+			.actions
+				button.btn.primary(type='submit') Submit
+				| 
+				a.btn(href='/runs') Cancel

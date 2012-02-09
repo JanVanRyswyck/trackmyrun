@@ -8,15 +8,14 @@ exports.new = (request, response) ->
 
 exports.create = (request, response) ->
 	if not request.form.isValid		
-		renderViewForNewShoes(response, request.form.getErrors())
-		return
+		return renderViewForNewShoes(response, request.form.getErrors())
 
 	step(
 		createShoes = () ->
-			newShoes = mapNewShoesFrom(request.form)
+			newPairOfShoes = mapNewShoesFrom(request.form)
 								
 			shoes = new Shoes()	
-			shoes.save(newShoes, @)
+			shoes.save(newPairOfShoes, @)
 
 		redirectToIndex = (error) ->
 			if error
@@ -26,12 +25,10 @@ exports.create = (request, response) ->
 	)
 
 renderViewForNewShoes = (response, validationErrors) ->
-	shoes = createDefaultShoes()
-	if(validationErrors)
-		shoes = mapNewShoesFrom(response.locals())
+	newPairOfShoes = if validationErrors then mapNewShoesFrom(response.locals()) else createDefaultShoes()
 
 	response.render('shoes/new',
-		shoes: shoes
+		shoes: newPairOfShoes
 		validationErrors: validationErrors or {}
 	)
 

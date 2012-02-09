@@ -12,8 +12,7 @@ exports.update = (request, response) ->
 	runId = request.params.id
 	
 	if not request.form.isValid		
-		renderViewForEditRun(runId, response, request.form.getErrors())
-		return
+		return renderViewForEditRun(runId, response, request.form.getErrors())
 
 	runs = new Runs() 
 	step(
@@ -46,7 +45,7 @@ renderViewForEditRun = (runId, response, validationErrors) ->
 				runs = new Runs() 
 				runs.getById(runId, @.parallel())
 
-		renderView = (error, shoesInUse, run) ->
+		renderView = (error, allShoes, run) ->
 			if error
 				throw new errors.DataError('An error occured while loading data for the edit run page.', error)
 
@@ -54,11 +53,9 @@ renderViewForEditRun = (runId, response, validationErrors) ->
 				run = mapRunFrom(response.locals())
 				run['id'] = runId
 
-			console.log run
-
 			response.render('runs/edit', 
 				run: run
-				shoesInUse: shoesInUse or []
+				pairsOfShoes: allShoes or []
 				validationErrors: validationErrors or {}
 			)
 	)

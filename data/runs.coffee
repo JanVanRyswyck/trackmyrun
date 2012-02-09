@@ -40,7 +40,6 @@ module.exports = class Runs
 		_database.view('runs/runsByYear', { startkey: startDate, endkey: endDate, descending: true }
 			(error, response) ->
 				if error
-					console.log error
 					return process.nextTick(-> callback(error))
 
 				runs = _(response).map((document) -> 
