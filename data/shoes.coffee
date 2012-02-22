@@ -1,4 +1,3 @@
-cradle = require('cradle')
 connectionManager = require('./connectionmanager')
 _ = require('underscore')
 

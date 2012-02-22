@@ -1,0 +1,23 @@
+.sidebar
+	.well
+		h4 Options
+		ul
+			li
+				a(href='/options') Shoes
+
+.content
+	.page-header
+		h1 Shoes
+
+	form(method='post', action='/options/#{options.id}')
+		input(name='_method', value='PUT', type='hidden')
+		fieldset
+			div(class='clearfix' + (validationErrors.wearThreshold ? ' error' : ''))
+				label(for='wearThreshold') Wear threshold *
+				.input
+					input#wearThreshold(type='text', name='wearThreshold', class='span2', autocomplete='off', value=options.shoes.wearThreshold)
+					span.unit km
+					span.help-inline #{validationErrors.wearThreshold} 
+
+		.actions
+			button.btn.primary(type='submit') Save

@@ -7,10 +7,10 @@
    "language": "javascript",
    "views": {
       "all": {
-       "map": "function (document) {\n            if (document.type === 'shoe') {\n              return emit(document.purchaseDate, document);\n            }\n          }" 
+       "map": "function (document) {\n            if (document.type === 'shoe') {\n              emit(document.purchaseDate, document);\n            }\n          }" 
       },
       "inUse": {
-           "map": "function (document) {\n            if (document.type === 'shoe' && document.inUse) {\n              return emit(document.purchaseDate, document);\n            }\n          }"
+           "map": "function (document) {\n            if (document.type === 'shoe' && document.inUse) {\n              emit(document.purchaseDate, document);\n            }\n          }"
       }
    }
 }
@@ -30,5 +30,19 @@
       "runsByYear": {
           "map": "function(document) {\n    if(document.type === 'run') {\n\tvar date = new Date(document.date);\n\temit(date, document);\n    }\n  \t\n}"
       }
+   }
+}
+
+// *********************************************************************
+// Options
+// *********************************************************************
+{
+   "_id": "_design/options",
+   "_rev": "1-592e40e3b3e6d4302aede1d4f37c8e57",
+   "language": "javascript",
+   "views": {
+       "all": {
+           "map": "function(document) {\n  if(document.type === 'options')  \t\n    emit(document._id, document);\n}"
+       }
    }
 }
