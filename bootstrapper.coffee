@@ -1,11 +1,11 @@
 express = require('express')
 cradle = require('cradle')
+everyauth = require('everyauth')
 _ = require('underscore')
 configuration = require('./configuration')
 viewHelpers = require('./views/viewhelpers')
 errors = require('./errors')
 errorHandler = require('./errorhandler')
-
 
 routes = require('./routes')
 routes.runs = _.extend(require('./routes/runs'), 
@@ -23,18 +23,32 @@ validators.options = require('./validators/options')
 
 
 exports.bootstrap = (application) ->
+	bootstrapAuthentication()
 	bootstrapExpress(application)
 	bootstrapRoutes(application)
 	bootstrapErrorHandler(application)
 	bootstrapCouchDB()
 
+bootstrapAuthentication = () ->
+	configuration.authenticationSettings((error, authentication) ->
+		if error
+			throw new errors.ConfigurationError('An error occured while reading the configuration settings for authenticating users.', error)
+
+		everyauth.twitter
+			.consumerKey(authentication.twitter.consumerKey)
+			.consumerSecret(authentication.twitter.consumerSecret)
+	)
+	
 bootstrapExpress = (application) ->
 	application.set('view engine', 'jade')
 	application.use(express.bodyParser())
 	application.use(express.methodOverride())
-	application.use(express.static(__dirname + '/public'))
 	application.use(express.cookieParser())
-	application.use(express.session({ secret: 'fluppe' }))
+	application.use(express.session( secret: '498F99F3BBEE4AE3A075EADA02499464' ))
+	application.use(everyauth.middleware())
+	application.use(express.static(__dirname + '/public'))
+	application.use(express.errorHandler())
+	
 	application.helpers(viewHelpers)
 	application.set('showStackTrace', application.settings.env == 'development')
 

@@ -11,29 +11,29 @@ module.exports = class Shoes
 	getById: (id, callback) ->
 		_database.get(id, (error, response) ->
 			if error
-				return process.nextTick(-> callback(error))	
+				return callback(error)
 			
 			shoes = mapFrom(response)	
-			process.nextTick(-> callback(error, shoes))
+			callback(error, shoes)
 		)
 
 	getAll: (callback) ->
 		_database.view('shoes/all', { descending: true }, 
 			(error, response) ->
 				if error
-					return process.nextTick(-> callback(error))
+					return callback(error)
 
 				shoesInUse = _(response).map((document) -> mapFrom(document.value))
-				process.nextTick(-> callback(error, shoesInUse))
+				callback(error, shoesInUse)
 			)
 
 	getShoesInUse: (callback) ->
 		_database.view('shoes/inUse', { descending: true }, (error, response) ->
 				if error
-					return process.nextTick(-> callback(error))
+					return callback(error)
 
 				shoesInUse = _(response).map((document) -> mapFrom(document.value))
-				process.nextTick(-> callback(error, shoesInUse))
+				callback(error, shoesInUse)
 			)
 
 	save: (shoes, callback) ->
@@ -45,12 +45,12 @@ module.exports = class Shoes
 		_database.save(id, revision, shoes, 
 			(error, response) -> 
 				if error
-					process.nextTick(-> callback(error))
+					return callback(error)
 				
-				process.nextTick(-> callback(error, 
+				callback(error, 
 					id: response.id
 					revision: response.revision
-				))
+				)
 			)
 
 	mapFrom = (document) ->

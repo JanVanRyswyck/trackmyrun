@@ -58,12 +58,12 @@ saveDefaultOptions = (callback) ->
 
 	save(defaultOptions, (error, data) ->
 		if error
-			process.nextTick(-> callback(error))
+			return callback(error)
 
 		defaultOptions['id'] = data.id
 		defaultOptions['revision'] = data.revision
 
-		process.nextTick(-> callback(error, defaultOptions))
+		callback(error, defaultOptions)
 	)
 
 get = (callback) ->

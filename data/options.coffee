@@ -11,13 +11,13 @@ module.exports = class Options
 		_database.view('options/all', { limit: 1 }, 
 			(error, response) ->
 				if error
-					return process.nextTick(-> callback(error))
+					return callback(error)
 
 				if(0 == response.length)	
 					return callback(error, null)
 
 				options = mapFrom(response[0].value)
-				process.nextTick(-> callback(error, options))
+				callback(error, options)
 			)
 
 	save: (options, callback) ->
@@ -29,12 +29,12 @@ module.exports = class Options
 		_database.save(id, revision, options, 
 			(error, response) -> 
 				if error
-					process.nextTick(-> callback(error))
+					return callback(error)
 				
-				process.nextTick(-> callback(error, 
+				callback(error, 
 					id: response.id
 					revision: response.revision
-				))
+				)
 			)
 
 	mapFrom = (document) ->
