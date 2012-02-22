@@ -48,9 +48,12 @@ module.exports = class Runs
 			)
 
 	save: (run, callback) ->
-		run['type'] = 'run'
+		id = run.id
+		revision = run.revision
 		
-		_database.save(run.id, run.revision, run, 
+		prepareForPersistence(run)
+
+		_database.save(id, revision, run, 
 			(error, response) -> 
 				if error
 					process.nextTick(-> callback(error))
@@ -71,3 +74,8 @@ module.exports = class Runs
 		duration: document.duration
 		shoes: document.shoes
 		speed: document.speed
+
+	prepareForPersistence = (run) ->
+		run['type'] = 'run'
+		delete run.id
+		delete run.revision

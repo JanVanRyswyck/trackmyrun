@@ -37,9 +37,12 @@ module.exports = class Shoes
 			)
 
 	save: (shoes, callback) ->
-		shoes['type'] = 'shoe'
+		id = shoes.id
+		revision = shoes.revision
 
-		_database.save(shoes.id, shoes.revision, shoes, 
+		prepareForPersistence(shoes)
+
+		_database.save(id, revision, shoes, 
 			(error, response) -> 
 				if error
 					process.nextTick(-> callback(error))
@@ -60,3 +63,8 @@ module.exports = class Shoes
 		purchaseDate: document.purchaseDate
 		size: document.size
 		status: document.status
+
+	prepareForPersistence = (shoes) ->
+		shoes['type'] = 'shoe'
+		delete shoes.id
+		delete shoes.revision
