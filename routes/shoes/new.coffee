@@ -6,7 +6,7 @@ Shoes = require('../../data/shoes')
 exports.new = (request, response) ->
 	renderViewForNewShoes(response)
 
-exports.create = (request, response) ->
+exports.create = (request, response, next) ->
 	if not request.form.isValid		
 		return renderViewForNewShoes(response, request.form.getErrors())
 
@@ -19,7 +19,7 @@ exports.create = (request, response) ->
 
 		redirectToIndex = (error) ->
 			if error
-				throw new errors.PersistenceError('An error occured while creating a new pair of shoes in the data store.', error)
+				return next new errors.PersistenceError('An error occured while creating a new pair of shoes in the data store.', error)
 
 			response.redirect('/shoes')	
 	)

@@ -3,7 +3,7 @@ errors = require('../errors')
 Runs = require('../data/runs')
 Shoes = require('../data/shoes')
 
-exports.index = (request, response) -> 
+exports.index = (request, response, next) -> 
 	step(
 		loadData = ->
 			runs = new Runs()
@@ -14,7 +14,7 @@ exports.index = (request, response) ->
 
 		renderView = (error, numberOfRunsPerYear, shoesInUse) ->
 			if error
-				throw new errors.DataError('An error occured while loading data for the main index page.', error)
+				return next new errors.DataError('An error occured while loading data for the main index page.', error)
 
 			response.render('index',
 				numberOfRunsPerYear: numberOfRunsPerYear 

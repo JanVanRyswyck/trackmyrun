@@ -5,12 +5,12 @@ Runs = require('../../data/runs')
 Shoes = require('../../data/shoes')
 Calculator = require('../../services/calculator')
 
-exports.new = (request, response) ->
-	renderViewForNewRun(response)
+exports.new = (request, response, next) ->
+	renderViewForNewRun(response, next)
 
-exports.create = (request, response) ->
+exports.create = (request, response, next) ->
 	if not request.form.isValid		
-		return renderViewForNewRun(response, request.form.getErrors())
+		return renderViewForNewRun(response, next, request.form.getErrors())
 
 	step(
 		createRun = () ->
@@ -22,12 +22,12 @@ exports.create = (request, response) ->
 
 		redirectToIndex = (error) ->
 			if error
-				throw new errors.PersistenceError('An error occured while creating a new run in the data store.', error)
+				return next new errors.PersistenceError('An error occured while creating a new run in the data store.', error)
 
 			response.redirect('/runs')	
 	)
 
-renderViewForNewRun = (response, validationErrors) ->
+renderViewForNewRun = (response, next, validationErrors) ->
 	step(
 		loadData = -> 
 			shoes = new Shoes()
@@ -35,7 +35,7 @@ renderViewForNewRun = (response, validationErrors) ->
 
 		renderView = (error, shoesInUse) ->
 			if error 
-				throw new errors.DataError('An error occured while loading data for the new run page.', error)
+				return next new errors.DataError('An error occured while loading data for the new run page.', error)
 				
 			run = if validationErrors then mapNewRunFrom(response.locals()) else createDefaultRun()
 						

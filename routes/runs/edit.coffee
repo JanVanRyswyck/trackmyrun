@@ -4,15 +4,15 @@ Runs = require('../../data/runs')
 Shoes = require('../../data/shoes')
 Calculator = require('../../services/calculator')
 
-exports.edit = (request, response) ->
+exports.edit = (request, response, next) ->
 	runId = request.params.id
-	renderViewForEditRun(runId, response)
+	renderViewForEditRun(runId, response, next)
 
-exports.update = (request, response) ->
+exports.update = (request, response, next) ->
 	runId = request.params.id
 	
 	if not request.form.isValid		
-		return renderViewForEditRun(runId, response, request.form.getErrors())
+		return renderViewForEditRun(runId, response, next, request.form.getErrors())
 
 	runs = new Runs() 
 	step(
@@ -21,7 +21,7 @@ exports.update = (request, response) ->
 
 		updateRun = (error, run) ->
 			if error
-				throw new errors.DataError('An error occured while loading the data for updating a run.', error)
+				return next new errors.DataError('An error occured while loading the data for updating a run.', error)
 			
 			applyChangesTo(run, request.form)
 			run.speed = new Calculator().calculateSpeedFor(run)
@@ -30,12 +30,12 @@ exports.update = (request, response) ->
 
 		redirectToIndex = (error) ->
 			if error
-				throw new errors.PersistenceError('An error occured while saving a run in the data store.', error)
+				return next new errors.PersistenceError('An error occured while saving a run in the data store.', error)
 
 			response.redirect('/runs')	
 	)
 
-renderViewForEditRun = (runId, response, validationErrors) ->
+renderViewForEditRun = (runId, response, next, validationErrors) ->
 	step(
 		loadData = ->
 			shoes = new Shoes()
@@ -47,7 +47,7 @@ renderViewForEditRun = (runId, response, validationErrors) ->
 
 		renderView = (error, allShoes, run) ->
 			if error
-				throw new errors.DataError('An error occured while loading data for the edit run page.', error)
+				return next new errors.DataError('An error occured while loading data for the edit run page.', error)
 
 			if validationErrors
 				run = mapRunFrom(response.locals())
