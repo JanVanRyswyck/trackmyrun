@@ -12,20 +12,7 @@ exports.create = (request, response, next) ->
 	if not request.form.isValid		
 		return renderViewForNewRun(response, next, request.form.getErrors())
 
-	step(
-		createRun = () ->
-			newRun = mapNewRunFrom(request.form)
-			newRun.speed = new Calculator().calculateSpeedFor(newRun)
-			
-			runs = new Runs()	
-			runs.save(newRun, @)
-
-		redirectToIndex = (error) ->
-			if error
-				return next new errors.PersistenceError('An error occured while creating a new run in the data store.', error)
-
-			response.redirect('/runs')	
-	)
+	createRunFlow(request.form, response, next)
 
 renderViewForNewRun = (response, next, validationErrors) ->
 	step(
@@ -44,6 +31,22 @@ renderViewForNewRun = (response, next, validationErrors) ->
 				pairsOfShoes: shoesInUse or []
 				validationErrors: validationErrors or {}
 			)
+	)
+
+createRunFlow = (formData, response, next) ->
+	step(
+		createRun = () ->
+			newRun = mapNewRunFrom(formData)
+			newRun.speed = new Calculator().calculateSpeedFor(newRun)
+			
+			runs = new Runs()	
+			runs.save(newRun, @)
+
+		redirectToIndex = (error) ->
+			if error
+				return next new errors.PersistenceError('An error occured while creating a new run in the data store.', error)
+
+			response.redirect('/runs')	
 	)
 
 createDefaultRun = () ->

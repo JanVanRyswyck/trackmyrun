@@ -3,15 +3,15 @@ errors = require('../../errors')
 Options = require('../../data/options')
 
 exports.index = (request, response, next) -> 
-	startShowOptionsFlow(request, response, next)
+	renderViewForOptions(request, response, next)
 
 exports.update = (request, response, next) ->
 	if not request.form.isValid 
 		return renderViewForInvalidOptions(request, response)
 	
-	startUpdateOptionsFlow(request, response, next)	
+	updateOptionsFlow(request.form, response, next)	
 
-startShowOptionsFlow = (request, response, next) ->
+renderViewForOptions = (request, response, next) ->
 	step(
 		getOptions = -> get(@)
 		renderView = (error, options) -> 
@@ -35,7 +35,7 @@ renderViewForInvalidOptions = (request, response) ->
 	
 	renderTheView(response, invalidOptions, request.form.getErrors())
 
-startUpdateOptionsFlow = (request, response, next) ->
+updateOptionsFlow = (formData, response, next) ->
 	step(
 		getOptions = -> get(@)
 
@@ -43,7 +43,7 @@ startUpdateOptionsFlow = (request, response, next) ->
 			if error
 				return next new errors.DataError('An error occured while loading the data for updating the options.', error)
 
-			applyChangesTo(currentOptions, request.form)
+			applyChangesTo(currentOptions, formData)
 			save(currentOptions, @)
 
 		redirectToOptions = (error) ->

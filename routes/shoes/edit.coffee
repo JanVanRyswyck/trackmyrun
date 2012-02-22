@@ -10,26 +10,9 @@ exports.update = (request, response, next) ->
 	shoesId = request.params.id
 	
 	if not request.form.isValid
-		return renderViewForEditShoes(shoesId, response, next, request.form.getErrors())
+		return renderViewForEditShoes(request.params.id, response, next, request.form.getErrors())
 
-	shoes = new Shoes() 
-	step(
-		getShoes = ->
-			shoes.getById(shoesId, @)
-
-		updateShoes = (error, pairOfShoes) ->
-			if error
-				return next new errors.DataError('An error occured while loading the data for updating a pair of shoes.', error)
-
-			applyChangesTo(pairOfShoes, request.form)
-			shoes.save(pairOfShoes, @)
-
-		redirectToIndex = (error) ->
-			if error
-				return next new errors.PersistenceError('An error occured while saving a pair of shoes in the data store.', error)
-
-			response.redirect('/shoes')	
-	)
+	updateShoesFlow(shoesId, request.form, response, next)
 
 renderViewForEditShoes = (shoesId, response, next, validationErrors) ->
 	step(
@@ -51,6 +34,27 @@ renderViewForEditShoes = (shoesId, response, next, validationErrors) ->
 				shoes: pairOfShoes
 				validationErrors: validationErrors or {}
 			)
+	)
+
+updateShoesFlow = (shoesId, formData, response, next) ->
+	shoes = new Shoes() 
+
+	step(
+		getShoes = ->
+			shoes.getById(shoesId, @)
+
+		updateShoes = (error, pairOfShoes) ->
+			if error
+				return next new errors.DataError('An error occured while loading the data for updating a pair of shoes.', error)
+
+			applyChangesTo(pairOfShoes, formData)
+			shoes.save(pairOfShoes, @)
+
+		redirectToIndex = (error) ->
+			if error
+				return next new errors.PersistenceError('An error occured while saving a pair of shoes in the data store.', error)
+
+			response.redirect('/shoes')	
 	)
 
 applyChangesTo = (pairOfShoes, formData) ->

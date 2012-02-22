@@ -23,7 +23,7 @@ module.exports = class Options
 	save: (options, callback) ->
 		id = options.id
 		revision = options.revision
-
+		
 		prepareForPersistence(options)
 
 		_database.save(id, revision, options, 

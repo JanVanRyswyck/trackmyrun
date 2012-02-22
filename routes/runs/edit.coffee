@@ -8,32 +8,13 @@ exports.edit = (request, response, next) ->
 	runId = request.params.id
 	renderViewForEditRun(runId, response, next)
 
-exports.update = (request, response, next) ->
+exports.update = (request, response, next) ->	
 	runId = request.params.id
-	
+
 	if not request.form.isValid		
 		return renderViewForEditRun(runId, response, next, request.form.getErrors())
 
-	runs = new Runs() 
-	step(
-		getRun = ->
-			runs.getById(runId, @)
-
-		updateRun = (error, run) ->
-			if error
-				return next new errors.DataError('An error occured while loading the data for updating a run.', error)
-			
-			applyChangesTo(run, request.form)
-			run.speed = new Calculator().calculateSpeedFor(run)
-
-			runs.save(run, @)
-
-		redirectToIndex = (error) ->
-			if error
-				return next new errors.PersistenceError('An error occured while saving a run in the data store.', error)
-
-			response.redirect('/runs')	
-	)
+	updateRunFlow(runId, request.form, response, next)
 
 renderViewForEditRun = (runId, response, next, validationErrors) ->
 	step(
@@ -58,6 +39,29 @@ renderViewForEditRun = (runId, response, next, validationErrors) ->
 				pairsOfShoes: allShoes or []
 				validationErrors: validationErrors or {}
 			)
+	)
+
+updateRunFlow = (runId, formData, response, next) ->
+	runs = new Runs()
+
+	step(
+		getRun = ->
+			runs.getById(runId, @)
+
+		updateRun = (error, run) ->
+			if error
+				return next new errors.DataError('An error occured while loading the data for updating a run.', error)
+			
+			applyChangesTo(run, formData)
+			run.speed = new Calculator().calculateSpeedFor(run)
+
+			runs.save(run, @)
+
+		redirectToIndex = (error) ->
+			if error
+				return next new errors.PersistenceError('An error occured while saving a run in the data store.', error)
+
+			response.redirect('/runs')	
 	)
 
 applyChangesTo = (run, formData) ->
