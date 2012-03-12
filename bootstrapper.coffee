@@ -23,13 +23,14 @@ validators.options = require('./validators/options')
 
 
 exports.bootstrap = (application) ->
-	bootstrapAuthentication()
+	# bootstrapAuthentication()
 	bootstrapExpress(application)
 	bootstrapRoutes(application)
-	bootstrapErrorHandler(application)
+	# TODO: Test
+	# bootstrapErrorHandler(application)
 	bootstrapCouchDB()
 
-bootstrapAuthentication = () ->
+exports.bootstrapAuthentication = () ->
 	configuration.authenticationSettings((error, authentication) ->
 		if error
 			throw new errors.ConfigurationError('An error occured while reading the configuration settings for authenticating users.', error)
@@ -37,21 +38,34 @@ bootstrapAuthentication = () ->
 		everyauth.twitter
 			.consumerKey(authentication.twitter.consumerKey)
 			.consumerSecret(authentication.twitter.consumerSecret)
+			.findOrCreateUser(
+				(session, accessToken, accessTokenSecret, twitterUser) ->
+					console.log twitterUserData
+					console.log accessToken
+					console.log accessTokenSecret	
+
+					return twitterUser
+					# TODO: find user and if cannot be found, do not authenticate
+				)
+			.redirectPath('/')
 	)
 	
 bootstrapExpress = (application) ->
-	application.set('view engine', 'jade')
 	application.use(express.bodyParser())
 	application.use(express.methodOverride())
 	application.use(express.cookieParser())
-	application.use(express.session( secret: '498F99F3BBEE4AE3A075EADA02499464' ))
+	application.use(express.session( secret: '498f99f3bbee4ae3a075eada02499464' ))
 	application.use(everyauth.middleware())
+	application.use(application.router)
 	application.use(express.static(__dirname + '/public'))
 	application.use(express.errorHandler())
 	
+	everyauth.helpExpress(application)
 	application.helpers(viewHelpers)
-	application.set('showStackTrace', application.settings.env == 'development')
 
+	application.set('view engine', 'jade')
+	application.set('showStackTrace', application.settings.env == 'development')
+	
 bootstrapRoutes = (application) ->
 	application.get('/', routes.index)
 
