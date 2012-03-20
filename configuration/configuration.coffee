@@ -7,8 +7,9 @@ module.exports = class Configuration
 		if @settings
 			return process.nextTick(=> callback(null, @settings))
 
-		fileSystem.readFile('./config.json', 'utf8', (error, data) ->
+		fileSystem.readFile(__dirname + '/config.json', 'utf8', (error, data) ->
 			if error
+				console.log error
 				return process.nextTick(-> callback(error))
 
 			@settings = JSON.parse(data)

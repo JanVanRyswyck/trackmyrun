@@ -46,3 +46,17 @@
        }
    }
 }
+
+// *********************************************************************
+// Users
+// *********************************************************************
+{
+   "_id": "_design/users",
+   "_rev": "1-dfd98898fdcf061822396d4fe419ae77",
+   "language": "javascript",
+   "views": {
+       "usersByName": {
+           "map": "function(document) {\n  if(document.type === 'user')\n    emit([document.name, document.authority], document);\n}"
+       }
+   }
+}

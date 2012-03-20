@@ -1,9 +1,7 @@
-bootstrapper = require('./bootstrapper')
+bootstrapper = require('./configuration/bootstrapper')
 express = require('express')
 require('./extensions')
 
-# TODO: Test
-bootstrapper.bootstrapAuthentication()
 application = express.createServer()
 
 application.configure ->

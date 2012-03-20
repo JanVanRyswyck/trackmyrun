@@ -28,7 +28,8 @@ module.exports = class Shoes
 			)
 
 	getShoesInUse: (callback) ->
-		_database.view('shoes/inUse', { descending: true }, (error, response) ->
+		_database.view('shoes/inUse', { descending: true }, 
+			(error, response) ->
 				if error
 					return callback(error)
 
