@@ -1,16 +1,17 @@
-.sidebar
-	.well
-		h4 My Runs
-		ul
-			each entry in numberOfRunsPerYear
-				li
-					a(href='/runs/#{ entry.year }') #{ entry.year } (#{ entry.numberOfRuns })
+if currentUser
+	.sidebar
+		.well
+			h4 My Runs
+			ul
+				each entry in numberOfRunsPerYear
+					li
+						a(href='/runs/#{ entry.year }') #{ entry.year } (#{ entry.numberOfRuns })
 
-		h4 My Shoes
-		ul
-			each shoe in shoesInUse
-				li
-					a(href="#") #{ shoe.name }
+			h4 My Shoes
+			ul
+				each shoe in shoesInUse
+					li
+						a(href="#") #{ shoe.name }
 
 .content
 	.hero-unit

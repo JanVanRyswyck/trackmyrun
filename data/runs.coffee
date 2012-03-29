@@ -18,25 +18,25 @@ module.exports = class Runs
 			callback(error, run)
 		)
 
-	getNumberOfRunsPerYear: (callback) ->
-		_database.view('runs/runCountPerYear',  { group: true, descending: true }, 
+	getNumberOfRunsPerYear: (user, callback) ->
+		_database.view('runs/runCountPerYear',  { startkey: [user.id, {}], group: true, descending: true }, 
 			(error, response) ->
 				if error
 					return callback(error)
 
 				runsPerYear = _(response).map((document) ->
-						year: document.key
-						numberOfRuns: document.value
+					year: document.key[1]
+					numberOfRuns: document.value
 				)
 			
 				callback(error, runsPerYear)
 			)
 
-	getRunsByYear: (year, callback) ->
+	getRunsByYear: (user, year, callback) ->
 		startDate = year + '-12-31'
 		endDate = year + '-01-01'
 
-		_database.view('runs/runsByYear', { startkey: startDate, endkey: endDate, descending: true }
+		_database.view('runs/runsByYear', { startkey: [user.id, startDate], endkey: [user.id, endDate], descending: true }
 			(error, response) ->
 				if error
 					return callback(error)

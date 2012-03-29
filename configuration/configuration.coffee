@@ -9,11 +9,10 @@ module.exports = class Configuration
 
 		fileSystem.readFile(__dirname + '/config.json', 'utf8', (error, data) ->
 			if error
-				console.log error
-				return process.nextTick(-> callback(error))
+				callback(error)
 
 			@settings = JSON.parse(data)
-			process.nextTick(=> callback(error, @settings))
+			callback(null, @settings)
 		)
 
 	@couchDBSettings: (callback) -> 
@@ -21,7 +20,7 @@ module.exports = class Configuration
 				if error
 					return callback(error)
 
-				callback(error, settings.couchDB)
+				callback(null, settings.couchDB)
 			)
 
 	@authenticationSettings: (callback) ->
@@ -29,7 +28,7 @@ module.exports = class Configuration
 				if error
 					return callback(error)
 
-				callback(error, settings.authentication)
+				callback(null, settings.authentication)
 			)		
 
 

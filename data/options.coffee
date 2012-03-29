@@ -7,8 +7,8 @@ module.exports = class Options
 		connection = connectionManager.getConnection()
 		_database = connection.database('trackmyrun')
 
-	get: (callback) ->
-		_database.view('options/all', { limit: 1 }, 
+	get: (user, callback) ->
+		_database.view('options/all', { startkey: [user.id, {}], limit: 1 }, 
 			(error, response) ->
 				if error
 					return callback(error)

@@ -10,22 +10,28 @@ html
 			.topbar-inner
 				.container-fluid
 					a.brand(href="/") Track My Run
-					ul.nav
-						li.active	
-							a(href="/") Home
-						li
-							a(href="/runs") My Runs
-						li
-							a(href="/shoes") My Shoes
-						li
-							a(href="/options") Options
-					ul.nav.pull-right
-						li
-							a(href="/auth/twitter")
-								img(style='border: 0px', src='https://si0.twimg.com/images/dev/buttons/sign-in-with-twitter-l.png')
+					
+					if locals.currentUser
+						ul.nav
+							li.active	
+								a(href="/") Home
+							li
+								a(href="/runs") My Runs
+							li
+								a(href="/shoes") My Shoes
+							li
+								a(href="/options") Options
+					else
+						ul.nav
+							li
+								a(href="/auth/twitter")
+									img(style='border: 0px', src='https://si0.twimg.com/images/dev/buttons/sign-in-with-twitter-l.png')
+		if locals.currentUser
+			.container-fluid
+				!=body
+				include includes/footer
+		else
+			.container
+				!=body
+				include includes/footer
 		
-		.container-fluid
-			!=body
-			
-			footer
-				p Copyright © 2011 Jan Van Ryswyck.

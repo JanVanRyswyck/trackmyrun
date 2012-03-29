@@ -11,7 +11,7 @@ exports.bootstrap = (application) ->
 	application.use(passport.session())
 	application.use(application.router)
 	application.use(express.static(__dirname + '/../public'))
-	application.use(express.errorHandler())
+	application.use(express.errorHandler(showStack: true, dumpExceptions: true))
 	
 	application.helpers(viewHelpers)
 

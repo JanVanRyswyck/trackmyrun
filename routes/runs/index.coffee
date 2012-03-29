@@ -9,20 +9,21 @@ exports.index = (request, response, next) ->
 	step(
 		loadData = ->
 			runs = new Runs()
-			runs.getNumberOfRunsPerYear(@.parallel())
-			runs.getRunsByYear(year, @.parallel())
+			runs.getNumberOfRunsPerYear(request.user, @.parallel())
+			runs.getRunsByYear(request.user, year, @.parallel())
 
 			shoes = new Shoes()
-			shoes.getAll(@.parallel())
+			shoes.getAll(request.user, @.parallel())
 
 		renderView = (error, numberOfRunsPerYear, runs, shoes) ->
 			if error
 				return next new errors.DataError('An error occured while loading data for the index page (runs).', error)
 
 			response.render('runs/index',
+				currentUser: request.user
 				numberOfRunsPerYear: numberOfRunsPerYear
-				runs: runs,
-				shoes: shoes,
+				runs: runs
+				shoes: shoes
 				year: year 
 			)
 	)

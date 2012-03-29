@@ -9,11 +9,11 @@ exports.update = (request, response, next) ->
 	if not request.form.isValid 
 		return renderViewForInvalidOptions(request, response)
 	
-	updateOptionsFlow(request.form, response, next)	
+	updateOptionsFlow(request.user, request.form, response, next)	
 
 renderViewForOptions = (request, response, next) ->
 	step(
-		getOptions = -> get(@)
+		getOptions = -> get(request.user, @)
 		renderView = (error, options) -> 
 			if error
 				return next new errors.DataError('An error occured while loading data for the index page (options).', error)
@@ -23,21 +23,22 @@ renderViewForOptions = (request, response, next) ->
 					if error
 						return next new errors.PersistenceError('An error occured while creating default options in the data store.', error)
 					
-					renderTheView(response, defaultOptions)		
+					renderTheView(response, request.user, defaultOptions)		
 				)
 							
-			renderTheView(response, options)	
+			renderTheView(response, request.user, options)	
 	)
 
 renderViewForInvalidOptions = (request, response) ->
 	invalidOptions = mapOptionsForm(response.locals())
 	invalidOptions['id'] = request.params.id
 	
-	renderTheView(response, invalidOptions, request.form.getErrors())
+	validationErrors = request.form.getErrors()
+	renderTheView(response, request.user invalidOptions, validationErrors)
 
-updateOptionsFlow = (formData, response, next) ->
+updateOptionsFlow = (user, formData, response, next) ->
 	step(
-		getOptions = -> get(@)
+		getOptions = -> get(user, @)
 
 		updateOptions = (error, currentOptions) ->
 			if error
@@ -66,16 +67,17 @@ saveDefaultOptions = (callback) ->
 		callback(error, defaultOptions)
 	)
 
-get = (callback) ->
+get = (user, callback) ->
 	options = new Options()
-	options.get(callback)
+	options.get(user, callback)
 
 save = (currentOptions, callback) ->
 	options = new Options()
 	options.save(currentOptions, callback)
 
-renderTheView = (response, options, validationErrors = {}) ->
+renderTheView = (response, user, options, validationErrors = {}) ->
 	response.render('options/index',
+		currentUser: user
 		options: options
 		validationErrors: validationErrors
 	)

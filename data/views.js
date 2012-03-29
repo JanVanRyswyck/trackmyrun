@@ -7,10 +7,10 @@
    "language": "javascript",
    "views": {
       "all": {
-       "map": "function (document) {\n            if (document.type === 'shoe') {\n              emit(document.purchaseDate, document);\n            }\n          }" 
+          "map": "function (document) {\n    if (document.type === 'shoe') {\n        emit([document.user, document.purchaseDate], document);\n    }\n}"
       },
       "inUse": {
-           "map": "function (document) {\n            if (document.type === 'shoe' && document.inUse) {\n              emit(document.purchaseDate, document);\n            }\n          }"
+          "map": "function (document) {\n    if (document.type === 'shoe' && document.inUse) {\n        emit([document.user, document.purchaseDate], document);\n    }\n}"
       }
    }
 }
@@ -24,11 +24,11 @@
    "language": "javascript",
    "views": {
       "runCountPerYear": {
-          "map": "function(document) {\n    if(document.type === 'run') {\n        var date = new Date(document.date);\n        emit(date.getFullYear(), document._id);\n    }\n}",
+          "map": "function(document) {\n    if(document.type === 'run') {\n        var date = new Date(document.date);\n        emit([document.user, date.getFullYear()], document._id);\n    }\n}",
           "reduce": "function(keys, values, rereduce) {\n  return values.length;\n}"
       },
       "runsByYear": {
-          "map": "function(document) {\n    if(document.type === 'run') {\n\tvar date = new Date(document.date);\n\temit(date, document);\n    }\n  \t\n}"
+          "map": "function(document) {\n    if(document.type === 'run') {\n\tvar date = new  Date(document.date);\n\temit([document.user, date], document);\n    }\n  \t\n}"
       }
    }
 }
@@ -42,7 +42,7 @@
    "language": "javascript",
    "views": {
        "all": {
-           "map": "function(document) {\n  if(document.type === 'options')  \t\n    emit(document._id, document);\n}"
+           "map": "function(document) {\n  if(document.type === 'options')  \t\n    emit([document.user, document._id], document);\n}"
        }
    }
 }

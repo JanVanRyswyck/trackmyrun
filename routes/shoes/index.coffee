@@ -6,13 +6,14 @@ exports.index = (request, response, next) ->
 	step(
 		loadData = ->
 			shoes = new Shoes()
-			shoes.getAll(@.parallel())
+			shoes.getAll(request.user, @.parallel())
 
 		renderView = (error, shoes) ->
 			if error
 				return next new errors.DataError('An error occured while loading data for the index page (shoes).', error)
 
 			response.render('shoes/index',
+				currentUser: request.user
 				shoes: shoes
 			)
 	)

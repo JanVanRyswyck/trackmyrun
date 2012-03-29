@@ -6,15 +6,15 @@ Shoes = require('../../data/shoes')
 Calculator = require('../../services/calculator')
 
 exports.new = (request, response, next) ->
-	renderViewForNewRun(response, next)
+	renderViewForNewRun(request.user, response, next)
 
 exports.create = (request, response, next) ->
 	if not request.form.isValid		
-		return renderViewForNewRun(response, next, request.form.getErrors())
+		return renderViewForNewRun(request.user, response, next, request.form.getErrors())
 
 	createRunFlow(request.form, response, next)
 
-renderViewForNewRun = (response, next, validationErrors) ->
+renderViewForNewRun = (user, response, next, validationErrors) ->
 	step(
 		loadData = -> 
 			shoes = new Shoes()

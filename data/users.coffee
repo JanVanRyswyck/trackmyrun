@@ -23,8 +23,9 @@ module.exports = class Shoes
 				if error
 					return callback(error)
 
-				if(0 == response.length)
-					return callback(error, null)
+				if(_(response).isEmpty() || 1 != response.length)
+					errorMessage = 'The user with name "' + name + '" could not be found in the data store.'
+					return callback(errorMessage, null)
 
 				user = mapFrom(response[0].value)
 				callback(null, user)	

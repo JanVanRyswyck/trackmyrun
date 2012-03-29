@@ -6,21 +6,22 @@ Calculator = require('../../services/calculator')
 
 exports.edit = (request, response, next) ->
 	runId = request.params.id
-	renderViewForEditRun(runId, response, next)
+	renderViewForEditRun(runId, request.user, response, next)
 
 exports.update = (request, response, next) ->	
 	runId = request.params.id
 
-	if not request.form.isValid		
-		return renderViewForEditRun(runId, response, next, request.form.getErrors())
+	if not request.form.isValid
+		validationErrors = request.form.getErrors()		
+		return renderViewForEditRun(runId, request.user, response, next, validationErrors)
 
 	updateRunFlow(runId, request.form, response, next)
 
-renderViewForEditRun = (runId, response, next, validationErrors) ->
+renderViewForEditRun = (runId, user, response, next, validationErrors) ->
 	step(
 		loadData = ->
 			shoes = new Shoes()
-			shoes.getAll(@.parallel())
+			shoes.getAll(user, @.parallel())
 
 			if not validationErrors
 				runs = new Runs() 
@@ -34,9 +35,10 @@ renderViewForEditRun = (runId, response, next, validationErrors) ->
 				run = mapRunFrom(response.locals())
 				run['id'] = runId
 
-			response.render('runs/edit', 
-				run: run
+			response.render('runs/edit',
+				currentUser: user
 				pairsOfShoes: allShoes or []
+				run: run
 				validationErrors: validationErrors or {}
 			)
 	)
