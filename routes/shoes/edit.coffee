@@ -3,23 +3,23 @@ errors = require('../../errors')
 Shoes = require('../../data/shoes')
 
 exports.edit = (request, response, next) ->
-	shoesId = request.params.id
-	renderViewForEditShoes(shoesId, response, next)
+	renderViewForEditShoes(request, response, next)
 
 exports.update = (request, response, next) ->
-	shoesId = request.params.id
-	
 	if not request.form.isValid
-		return renderViewForEditShoes(request.params.id, response, next, request.form.getErrors())
+		return renderViewForEditShoes(request, response, next)
 
-	updateShoesFlow(shoesId, request.form, response, next)
+	updateShoesFlow(request, response, next)
 
-renderViewForEditShoes = (shoesId, response, next, validationErrors) ->
+renderViewForEditShoes = (request, response, next) ->
+	shoesId = request.params.id
+	validationErrors = request.form.getErrors() if request.method == 'PUT'
+
 	step(
 		loadData = ->
 			return @() if validationErrors
 
-			shoes = new Shoes() 
+			shoes = new Shoes()  ##TODO Jan: refactor
 			shoes.getById(shoesId, @)
 
 		renderView = (error, pairOfShoes) ->
@@ -30,24 +30,26 @@ renderViewForEditShoes = (shoesId, response, next, validationErrors) ->
 				pairOfShoes = mapShoesFrom(response.locals())
 				pairOfShoes['id'] = shoesId
 				
-			response.render('shoes/edit', 
+			response.render('shoes/edit',
+				currentUser: request.user 
 				shoes: pairOfShoes
 				validationErrors: validationErrors or {}
 			)
 	)
 
-updateShoesFlow = (shoesId, formData, response, next) ->
+updateShoesFlow = (request, response, next) ->
 	shoes = new Shoes() 
-
+	
 	step(
 		getShoes = ->
+			shoesId = request.params.id   ##TODO Jan: refactor
 			shoes.getById(shoesId, @)
 
 		updateShoes = (error, pairOfShoes) ->
 			if error
 				return next new errors.DataError('An error occured while loading the data for updating a pair of shoes.', error)
 
-			applyChangesTo(pairOfShoes, formData)
+			applyChangesTo(pairOfShoes, request.form)
 			shoes.save(pairOfShoes, @)
 
 		redirectToIndex = (error) ->

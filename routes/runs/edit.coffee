@@ -5,23 +5,22 @@ Shoes = require('../../data/shoes')
 Calculator = require('../../services/calculator')
 
 exports.edit = (request, response, next) ->
-	runId = request.params.id
-	renderViewForEditRun(runId, request.user, response, next)
+	renderViewForEditRun(request, response, next)
 
 exports.update = (request, response, next) ->	
+	if not request.form.isValid	
+		return renderViewForEditRun(request, response, next)
+
+	updateRunFlow(request, response, next)
+
+renderViewForEditRun = (request, response, next) ->
 	runId = request.params.id
+	validationErrors = request.form.getErrors()	if request.method == 'PUT'
 
-	if not request.form.isValid
-		validationErrors = request.form.getErrors()		
-		return renderViewForEditRun(runId, request.user, response, next, validationErrors)
-
-	updateRunFlow(runId, request.form, response, next)
-
-renderViewForEditRun = (runId, user, response, next, validationErrors) ->
 	step(
 		loadData = ->
 			shoes = new Shoes()
-			shoes.getAll(user, @.parallel())
+			shoes.getAll(request.user, @.parallel())
 
 			if not validationErrors
 				runs = new Runs() 
@@ -36,25 +35,25 @@ renderViewForEditRun = (runId, user, response, next, validationErrors) ->
 				run['id'] = runId
 
 			response.render('runs/edit',
-				currentUser: user
+				currentUser: request.user
 				pairsOfShoes: allShoes or []
 				run: run
 				validationErrors: validationErrors or {}
 			)
 	)
 
-updateRunFlow = (runId, formData, response, next) ->
+updateRunFlow = (request, response, next) ->
 	runs = new Runs()
 
 	step(
 		getRun = ->
-			runs.getById(runId, @)
+			runs.getById(request.params.id, @)
 
 		updateRun = (error, run) ->
 			if error
 				return next new errors.DataError('An error occured while loading the data for updating a run.', error)
 			
-			applyChangesTo(run, formData)
+			applyChangesTo(run, request.form)
 			run.speed = new Calculator().calculateSpeedFor(run)
 
 			runs.save(run, @)

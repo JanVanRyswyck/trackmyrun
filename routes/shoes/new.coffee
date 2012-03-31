@@ -4,26 +4,28 @@ errors = require('../../errors')
 Shoes = require('../../data/shoes')
 
 exports.new = (request, response) ->
-	renderViewForNewShoes(response)
+	renderViewForNewShoes(request, response)
 
 exports.create = (request, response, next) ->
 	if not request.form.isValid		
-		return renderViewForNewShoes(response, request.form.getErrors())
+		return renderViewForNewShoes(request, response)
 
-	createShoesFlow(request.form, response, next)
+	createShoesFlow(request, response, next)
 
-renderViewForNewShoes = (response, validationErrors) ->
-	newPairOfShoes = if validationErrors then mapNewShoesFrom(response.locals()) else createDefaultShoes()
+renderViewForNewShoes = (request, response) ->
+	validationErrors = request.form.getErrors() if request.method == 'POST'
+	newPairOfShoes = if validationErrors then mapNewShoesFrom(response.locals(), request.user) else createDefaultShoes()
 
 	response.render('shoes/new',
+		currentUser: request.user
 		shoes: newPairOfShoes
 		validationErrors: validationErrors or {}
 	)
 
-createShoesFlow = (formData, response, next) ->
+createShoesFlow = (request, response, next) ->
 	step(
 		createShoes = () ->
-			newPairOfShoes = mapNewShoesFrom(formData)
+			newPairOfShoes = mapNewShoesFrom(request.form, request.user)
 								
 			shoes = new Shoes()	
 			shoes.save(newPairOfShoes, @)
@@ -41,11 +43,12 @@ createDefaultShoes = () ->
 	purchaseDate: _.getCurrentDate()
 	size: ''
 
-mapNewShoesFrom = (formData) ->
+mapNewShoesFrom = (formData, user) ->
 	color: formData.color
 	distance: 0
 	inUse: true
 	name: formData.name
 	purchaseDate: formData.purchaseDate
 	size: formData.size
-	status: 'OK'	
+	status: 'OK'
+	user: user.id	

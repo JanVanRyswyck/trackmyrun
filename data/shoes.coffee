@@ -64,6 +64,7 @@ module.exports = class Shoes
 		purchaseDate: document.purchaseDate
 		size: document.size
 		status: document.status
+		user: document.user
 
 	prepareForPersistence = (shoes) ->
 		shoes['type'] = 'shoe'

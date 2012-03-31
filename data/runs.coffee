@@ -74,6 +74,7 @@ module.exports = class Runs
 		duration: document.duration
 		shoes: document.shoes
 		speed: document.speed
+		user: document.user
 
 	prepareForPersistence = (run) ->
 		run['type'] = 'run'

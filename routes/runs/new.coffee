@@ -6,37 +6,39 @@ Shoes = require('../../data/shoes')
 Calculator = require('../../services/calculator')
 
 exports.new = (request, response, next) ->
-	renderViewForNewRun(request.user, response, next)
+	renderViewForNewRun(request, response, next)
 
 exports.create = (request, response, next) ->
 	if not request.form.isValid		
-		return renderViewForNewRun(request.user, response, next, request.form.getErrors())
+		return renderViewForNewRun(request, response, next)
 
-	createRunFlow(request.form, response, next)
+	createRunFlow(request, response, next)
 
-renderViewForNewRun = (user, response, next, validationErrors) ->
+renderViewForNewRun = (request, response, next) ->
 	step(
 		loadData = -> 
 			shoes = new Shoes()
-			shoes.getShoesInUse(@)
+			shoes.getShoesInUse(request.user, @)
 
 		renderView = (error, shoesInUse) ->
 			if error 
 				return next new errors.DataError('An error occured while loading data for the new run page.', error)
-				
-			run = if validationErrors then mapNewRunFrom(response.locals()) else createDefaultRun()
+			
+			validationErrors = request.form.getErrors() if request.method == 'POST'
+			run = if validationErrors then mapNewRunFrom(response.locals(), request.user) else createDefaultRun()
 						
 			response.render('runs/new',
+				currentUser: request.user
 				run: run
 				pairsOfShoes: shoesInUse or []
 				validationErrors: validationErrors or {}
 			)
 	)
 
-createRunFlow = (formData, response, next) ->
+createRunFlow = (request, response, next) ->
 	step(
 		createRun = () ->
-			newRun = mapNewRunFrom(formData)
+			newRun = mapNewRunFrom(request.form, request.user)
 			newRun.speed = new Calculator().calculateSpeedFor(newRun)
 			
 			runs = new Runs()	
@@ -60,7 +62,7 @@ createDefaultRun = () ->
 	shoes: -1
 	comments: ''
 
-mapNewRunFrom = (formData) ->
+mapNewRunFrom = (formData, user) ->
 	date: formData.date
 	distance: formData.distance
 	duration:
@@ -70,3 +72,4 @@ mapNewRunFrom = (formData) ->
 	averageHeartRate: formData.averageHeartRate
 	shoes: formData.shoes		
 	comments: formData.comments
+	user: user.id

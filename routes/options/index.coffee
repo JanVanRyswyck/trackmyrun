@@ -9,7 +9,7 @@ exports.update = (request, response, next) ->
 	if not request.form.isValid 
 		return renderViewForInvalidOptions(request, response)
 	
-	updateOptionsFlow(request.user, request.form, response, next)	
+	updateOptionsFlow(request, response, next)	
 
 renderViewForOptions = (request, response, next) ->
 	step(
@@ -19,7 +19,7 @@ renderViewForOptions = (request, response, next) ->
 				return next new errors.DataError('An error occured while loading data for the index page (options).', error)
 
 			if not options
-				return saveDefaultOptions((error, defaultOptions)->
+				return saveDefaultOptions(request.user, (error, defaultOptions)->
 					if error
 						return next new errors.PersistenceError('An error occured while creating default options in the data store.', error)
 					
@@ -33,18 +33,18 @@ renderViewForInvalidOptions = (request, response) ->
 	invalidOptions = mapOptionsForm(response.locals())
 	invalidOptions['id'] = request.params.id
 	
-	validationErrors = request.form.getErrors()
-	renderTheView(response, request.user invalidOptions, validationErrors)
+	validationErrors = request.form.getErrors() if request.form
+	renderTheView(response, request.user, invalidOptions, validationErrors)
 
-updateOptionsFlow = (user, formData, response, next) ->
+updateOptionsFlow = (request, response, next) ->
 	step(
-		getOptions = -> get(user, @)
+		getOptions = -> get(request.user, @)
 
 		updateOptions = (error, currentOptions) ->
 			if error
 				return next new errors.DataError('An error occured while loading the data for updating the options.', error)
 
-			applyChangesTo(currentOptions, formData)
+			applyChangesTo(currentOptions, request.form)
 			save(currentOptions, @)
 
 		redirectToOptions = (error) ->
@@ -54,8 +54,8 @@ updateOptionsFlow = (user, formData, response, next) ->
 			response.redirect('/options')	
 	)
 
-saveDefaultOptions = (callback) ->
-	defaultOptions = createDefaultOptions()
+saveDefaultOptions = (user, callback) ->
+	defaultOptions = createDefaultOptionsFor(user)
 
 	save(defaultOptions, (error, data) ->
 		if error
@@ -89,6 +89,7 @@ mapOptionsForm = (formData) ->
 	shoes: 
 		wearThreshold: formData.wearThreshold
 
-createDefaultOptions = ->
+createDefaultOptionsFor = (user) ->
 	shoes:
 		wearThreshold: 1000
+	user: user.id

@@ -8,7 +8,7 @@ module.exports = class Options
 		_database = connection.database('trackmyrun')
 
 	get: (user, callback) ->
-		_database.view('options/all', { startkey: [user.id, {}], limit: 1 }, 
+		_database.view('options/all', { startkey: [user.id], limit: 1 }, 
 			(error, response) ->
 				if error
 					return callback(error)
@@ -42,6 +42,7 @@ module.exports = class Options
 		revision: document._rev
 		shoes: 
 			wearThreshold: document.shoes.wearThreshold
+		user: document.user
 
 	prepareForPersistence = (options) ->
 		options['type'] = 'options'
