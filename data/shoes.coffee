@@ -18,7 +18,7 @@ module.exports = class Shoes
 		)
 
 	getAll: (user, callback) ->
-		_database.view('shoes/all', { startkey: [user.id, {}], descending: true }, 
+		_database.view('shoes/all', { startkey: [user.id, {}], endkey: [user.id], descending: true }, 
 			(error, response) ->
 				if error
 					return callback(error)
@@ -28,7 +28,7 @@ module.exports = class Shoes
 			)
 
 	getShoesInUse: (user, callback) ->
-		_database.view('shoes/inUse', { startkey: [user.id, {}], descending: true }, 
+		_database.view('shoes/inUse', { startkey: [user.id, {}], endkey: [user.id], descending: true }, 
 			(error, response) ->
 				if error
 					return callback(error)

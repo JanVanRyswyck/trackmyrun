@@ -19,7 +19,7 @@ module.exports = class Runs
 		)
 
 	getNumberOfRunsPerYear: (user, callback) ->
-		_database.view('runs/runCountPerYear',  { startkey: [user.id, {}], group: true, descending: true }, 
+		_database.view('runs/runCountPerYear',  { startkey: [user.id, {}], endkey: [user.id], group: true, descending: true }, 
 			(error, response) ->
 				if error
 					return callback(error)

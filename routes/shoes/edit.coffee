@@ -19,7 +19,7 @@ renderViewForEditShoes = (request, response, next) ->
 		loadData = ->
 			return @() if validationErrors
 
-			shoes = new Shoes()  ##TODO Jan: refactor
+			shoes = new Shoes()
 			shoes.getById(shoesId, @)
 
 		renderView = (error, pairOfShoes) ->
@@ -42,7 +42,7 @@ updateShoesFlow = (request, response, next) ->
 	
 	step(
 		getShoes = ->
-			shoesId = request.params.id   ##TODO Jan: refactor
+			shoesId = request.params.id
 			shoes.getById(shoesId, @)
 
 		updateShoes = (error, pairOfShoes) ->
