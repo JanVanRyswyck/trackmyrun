@@ -1,6 +1,6 @@
-passport = require('passport')
 _ = require('underscore')
-errorHandler = require('../errorhandler')
+authenticationHandler = require('../handlers/authenticationhandler')
+errorHandler = require('../handlers/errorhandler')
 
 routes = require('../routes')
 routes.runs = _.extend(require('../routes/runs'), 
@@ -17,9 +17,10 @@ validators.shoes = require('../validators/shoes')
 validators.options = require('../validators/options')
 
 exports.bootstrap = (application) ->
+	authenticationHandler.bootstrap(application)
 	bootstrapRoutes(application)
-	bootstrapErrorHandler(application)
-	
+	errorHandler.bootstrap(application)
+
 bootstrapRoutes = (application) ->
 	application.get('/', routes.index)
 
@@ -38,11 +39,5 @@ bootstrapRoutes = (application) ->
 	application.get('/options', routes.options.index)
 	application.put('/options/:id([a-z0-9]{32})', validators.options.validate, routes.options.update)
 
-	application.get('/auth/twitter', passport.authenticate('twitter'))
-	application.get('/auth/twitter/callback', 
-		passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/auth/twitter' }))
-
-bootstrapErrorHandler = (application) ->
-	errorHandler.bootstrap(application)
 
 			

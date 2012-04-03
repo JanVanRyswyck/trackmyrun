@@ -21,10 +21,12 @@ html
 								a(href="/shoes") My Shoes
 							li
 								a(href="/options") Options
+							li 
+								p.pull-right #{ currentUser.displayName }
 					else
 						ul.nav
 							li
-								a(href="/auth/twitter")
+								a.pull-right(href="/auth/twitter")
 									img(style='border: 0px', src='https://si0.twimg.com/images/dev/buttons/sign-in-with-twitter-l.png')
 		if locals.currentUser
 			.container-fluid
