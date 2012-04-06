@@ -13,7 +13,7 @@ onPageNotFound = (request, response, next) ->
 	next(new errors.PageNotFoundError())
 
 onError = (error, request, response, next) ->
-	if error instanceof errors.PageNotFoundError
+	if typeof error == typeof errors.PageNotFoundError
 		response.render('404', 
 			status: 404
 		)
@@ -21,6 +21,6 @@ onError = (error, request, response, next) ->
 		response.render('500', 
 			status: 500,
 			error: util.inspect(error),
-			showDetails: _applicationSettings.showStackTrace	
+			showDetails: _applicationSettings.showErrorDetails	
 		)
 

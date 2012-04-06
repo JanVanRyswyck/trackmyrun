@@ -15,14 +15,6 @@ module.exports = class Configuration
 			callback(null, @settings)
 		)
 
-	@couchDBSettings: (callback) -> 
-		@getSettings((error, settings)->
-				if error
-					return callback(error)
-
-				callback(null, settings.couchDB)
-			)
-
 	@authenticationSettings: (callback) ->
 		@getSettings((error, settings)->
 				if error
@@ -31,7 +23,12 @@ module.exports = class Configuration
 				callback(null, settings.authentication)
 			)		
 
+	@couchDBSettings: (callback) -> 
+		@getSettings((error, settings)->
+				if error
+					return callback(error)
 
-
+				callback(null, settings.couchDB)
+			)
 
 	
