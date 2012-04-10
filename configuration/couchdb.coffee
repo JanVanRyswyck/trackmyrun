@@ -16,5 +16,5 @@ exports.bootstrap = ->
 		)
 
 		# TODO Jan: Test (put in handler??)
-		require('../handlers/changeshandler').bootstrap()
+		# require('../handlers/changeshandler').bootstrap()
 	)

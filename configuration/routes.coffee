@@ -1,8 +1,8 @@
+passport = require('passport')
 _ = require('underscore')
-authenticationHandler = require('../handlers/authenticationhandler')
-errorHandler = require('../handlers/errorhandler')
 
-routes = require('../routes')
+routes = _.extend(require('../routes'),
+		 		  require('../routes/authentication'))
 routes.runs = _.extend(require('../routes/runs'), 
 					   require('../routes/runs/new'),
 					   require('../routes/runs/edit'))
@@ -17,9 +17,17 @@ validators.shoes = require('../validators/shoes')
 validators.options = require('../validators/options')
 
 exports.bootstrap = (application) ->
-	authenticationHandler.bootstrap(application)
+	bootstrapAuthenticationRoutes(application)
 	bootstrapRoutes(application)
-	errorHandler.bootstrap(application)
+	bootstrapErrorRoutes(application)
+
+bootstrapAuthenticationRoutes = (application) ->
+	application.all('/runs*', routes.ensureAuthenticated)
+	application.all('/shoes*', routes.ensureAuthenticated)
+	application.all('/options*', routes.ensureAuthenticated)
+
+	application.get('/auth/twitter', passport.authenticate('twitter'))
+	application.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/' }))
 
 bootstrapRoutes = (application) ->
 	application.get('/', routes.index)
@@ -38,6 +46,9 @@ bootstrapRoutes = (application) ->
 
 	application.get('/options', routes.options.index)
 	application.put('/options/:id([a-z0-9]{32})', validators.options.validate, routes.options.update)
-
-
 			
+bootstrapErrorRoutes = (application) ->
+	errorHandler = require('../routes/error')(application)
+
+	application.use(errorHandler.onPageNotFound)
+	application.use(errorHandler.onError)
