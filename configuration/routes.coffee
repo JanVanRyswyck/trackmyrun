@@ -17,11 +17,11 @@ validators.shoes = require('../validators/shoes')
 validators.options = require('../validators/options')
 
 exports.bootstrap = (application) ->
-	bootstrapAuthenticationRoutes(application)
-	bootstrapRoutes(application)
-	bootstrapErrorRoutes(application)
+	registerAuthenticationRoutes(application)
+	registerApplicationRoutes(application)
+	registerErrorHandler(application)
 
-bootstrapAuthenticationRoutes = (application) ->
+registerAuthenticationRoutes = (application) ->
 	application.all('/runs*', routes.ensureAuthenticated)
 	application.all('/shoes*', routes.ensureAuthenticated)
 	application.all('/options*', routes.ensureAuthenticated)
@@ -29,7 +29,7 @@ bootstrapAuthenticationRoutes = (application) ->
 	application.get('/auth/twitter', passport.authenticate('twitter'))
 	application.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/' }))
 
-bootstrapRoutes = (application) ->
+registerApplicationRoutes = (application) ->
 	application.get('/', routes.index)
 
 	application.post('/runs', validators.run.validate, routes.runs.create)
@@ -47,7 +47,7 @@ bootstrapRoutes = (application) ->
 	application.get('/options', routes.options.index)
 	application.put('/options/:id([a-z0-9]{32})', validators.options.validate, routes.options.update)
 			
-bootstrapErrorRoutes = (application) ->
+registerErrorHandler = (application) ->
 	errorHandler = require('../routes/error')(application)
 
 	application.use(errorHandler.onPageNotFound)

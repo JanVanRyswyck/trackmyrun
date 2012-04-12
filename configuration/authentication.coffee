@@ -2,7 +2,7 @@ passport = require('passport')
 configuration = require('./configuration')
 errors = require('../errors')
 TwitterStrategy = require('passport-twitter').Strategy
-Users = require('../data/users')
+users = require('../data/users')
 
 exports.bootstrap = ->
 	configuration.authenticationSettings((error, authentication) ->
@@ -17,7 +17,6 @@ exports.bootstrap = ->
 	)
 
 verifyUser = (token, tokenSecret, profile, done) ->
-	users = new Users()
 	users.getByName(profile.username, "twitter", 
 		(error, user) ->
 			if error
@@ -34,7 +33,6 @@ passport.serializeUser((user, done) ->
 )
 
 passport.deserializeUser((id, done) ->
-	users = new Users()
 	user = users.getById(id, (error, user) ->
 		if(error)
 			return done(error)

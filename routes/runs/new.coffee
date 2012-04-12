@@ -1,8 +1,8 @@
 step = require('step')
 _ = require('underscore')
 errors = require('../../errors')
-Runs = require('../../data/runs')
-Shoes = require('../../data/shoes')
+runs = require('../../data/runs')
+shoes = require('../../data/shoes')
 Calculator = require('../../services/calculator')
 
 exports.new = (request, response, next) ->
@@ -17,7 +17,6 @@ exports.create = (request, response, next) ->
 renderViewForNewRun = (request, response, next) ->
 	step(
 		loadData = -> 
-			shoes = new Shoes()
 			shoes.getShoesInUse(request.user, @)
 
 		renderView = (error, shoesInUse) ->
@@ -40,8 +39,7 @@ createRunFlow = (request, response, next) ->
 		createRun = () ->
 			newRun = mapNewRunFrom(request.form, request.user)
 			newRun.speed = new Calculator().calculateSpeedFor(newRun)
-			
-			runs = new Runs()	
+	
 			runs.save(newRun, @)
 
 		redirectToIndex = (error) ->

@@ -1,5 +1,6 @@
 connectionManager = require('../data/connectionmanager')
 
+# TODO Jan: Remove and move to services
 exports.bootstrap = ->
 	connection = connectionManager.getConnection()
 	database = connection.database('trackmyrun')

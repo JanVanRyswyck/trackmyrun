@@ -1,11 +1,10 @@
 step = require('step')
 errors = require('../../errors')
-Shoes = require('../../data/shoes')
+shoes = require('../../data/shoes')
 
 exports.index = (request, response, next) -> 
 	step(
 		loadData = ->
-			shoes = new Shoes()
 			shoes.getAll(request.user, @.parallel())
 
 		renderView = (error, shoes) ->

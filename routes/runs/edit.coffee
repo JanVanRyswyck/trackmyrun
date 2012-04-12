@@ -1,7 +1,7 @@
 step = require('step')
 errors = require('../../errors')
-Runs = require('../../data/runs')
-Shoes = require('../../data/shoes')
+runs = require('../../data/runs')
+shoes = require('../../data/shoes')
 Calculator = require('../../services/calculator')
 
 exports.edit = (request, response, next) ->
@@ -19,12 +19,8 @@ renderViewForEditRun = (request, response, next) ->
 
 	step(
 		loadData = ->
-			shoes = new Shoes()
 			shoes.getAll(request.user, @.parallel())
-
-			if not validationErrors
-				runs = new Runs() 
-				runs.getById(runId, @.parallel())
+			runs.getById(runId, @.parallel()) if not validationErrors
 
 		renderView = (error, allShoes, run) ->
 			if error
@@ -43,8 +39,6 @@ renderViewForEditRun = (request, response, next) ->
 	)
 
 updateRunFlow = (request, response, next) ->
-	runs = new Runs()
-
 	step(
 		getRun = ->
 			runs.getById(request.params.id, @)

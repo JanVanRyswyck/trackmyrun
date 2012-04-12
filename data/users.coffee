@@ -1,36 +1,39 @@
 connectionManager = require('./connectionmanager')
 _ = require('underscore')
 
-module.exports = class Shoes
-	_database = null
+_database = null
 
-	constructor: ->
-		connection = connectionManager.getConnection()
-		_database = connection.database('trackmyrun')
+exports.getById = (id, callback) ->
+	database().get(id, (error, response) ->
+		if error
+			return callback(error)
+		
+		shoes = mapFrom(response)	
+		callback(null, shoes)
+	)
 
-	getById: (id, callback) ->
-		_database.get(id, (error, response) ->
+exports.getByName = (name, authority, callback) ->
+	database().view('users/usersByName', { key: [name, authority] }, 
+		(error, response) ->
 			if error
 				return callback(error)
-			
-			shoes = mapFrom(response)	
-			callback(null, shoes)
+
+			if(_(response).isEmpty() || 1 != response.length)
+				errorMessage = 'The user with name "' + name + '" could not be found in the data store.'
+				return callback(errorMessage, null)
+
+			user = mapFrom(response[0].value)
+			callback(null, user)	
 		)
 
-	getByName: (name, authority, callback) ->
-		_database.view('users/usersByName', { key: [name, authority] }, 
-			(error, response) ->
-				if error
-					return callback(error)
+database = () ->
+	return _database if _database
 
-				if(_(response).isEmpty() || 1 != response.length)
-					errorMessage = 'The user with name "' + name + '" could not be found in the data store.'
-					return callback(errorMessage, null)
+	connection = connectionManager.getConnection()
+	return _database = connection.database('trackmyrun')
 
-				user = mapFrom(response[0].value)
-				callback(null, user)	
-			)
+mapFrom = (document) ->
+	id: document._id
+	displayName: document.displayName
 
-	mapFrom = (document) ->
-		id: document._id
-		displayName: document.displayName
+	

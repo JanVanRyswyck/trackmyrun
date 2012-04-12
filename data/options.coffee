@@ -1,50 +1,51 @@
 connectionManager = require('./connectionmanager')
 
-module.exports = class Options
-	_database = null
+_database = null
 
-	constructor: ->
-		connection = connectionManager.getConnection()
-		_database = connection.database('trackmyrun')
+exports.get = (user, callback) ->
+	database().view('options/all', { startkey: [user.id], limit: 1 }, 
+		(error, response) ->
+			if error
+				return callback(error)
 
-	get: (user, callback) ->
-		_database.view('options/all', { startkey: [user.id], limit: 1 }, 
-			(error, response) ->
-				if error
-					return callback(error)
+			if(0 == response.length)	
+				return callback(error, null)
 
-				if(0 == response.length)	
-					return callback(error, null)
+			options = mapFrom(response[0].value)
+			callback(error, options)
+		)
 
-				options = mapFrom(response[0].value)
-				callback(error, options)
+exports.save = (options, callback) ->
+	id = options.id
+	revision = options.revision
+	
+	prepareForPersistence(options)
+
+	database().save(id, revision, options, 
+		(error, response) -> 
+			if error
+				return callback(error)
+			
+			callback(error, 
+				id: response.id
+				revision: response.revision
 			)
+		)
 
-	save: (options, callback) ->
-		id = options.id
-		revision = options.revision
-		
-		prepareForPersistence(options)
+database = () ->
+	return _database if _database
 
-		_database.save(id, revision, options, 
-			(error, response) -> 
-				if error
-					return callback(error)
-				
-				callback(error, 
-					id: response.id
-					revision: response.revision
-				)
-			)
+	connection = connectionManager.getConnection()
+	return _database = connection.database('trackmyrun')
 
-	mapFrom = (document) ->
-		id: document._id
-		revision: document._rev
-		shoes: 
-			wearThreshold: document.shoes.wearThreshold
-		user: document.user
+mapFrom = (document) ->
+	id: document._id
+	revision: document._rev
+	shoes: 
+		wearThreshold: document.shoes.wearThreshold
+	user: document.user
 
-	prepareForPersistence = (options) ->
-		options['type'] = 'options'
-		delete options.id
-		delete options.revision
+prepareForPersistence = (options) ->
+	options['type'] = 'options'
+	delete options.id
+	delete options.revision

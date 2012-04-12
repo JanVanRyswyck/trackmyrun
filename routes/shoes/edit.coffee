@@ -1,6 +1,6 @@
 step = require('step')
 errors = require('../../errors')
-Shoes = require('../../data/shoes')
+shoes = require('../../data/shoes')
 
 exports.edit = (request, response, next) ->
 	renderViewForEditShoes(request, response, next)
@@ -18,8 +18,6 @@ renderViewForEditShoes = (request, response, next) ->
 	step(
 		loadData = ->
 			return @() if validationErrors
-
-			shoes = new Shoes()
 			shoes.getById(shoesId, @)
 
 		renderView = (error, pairOfShoes) ->
@@ -38,8 +36,6 @@ renderViewForEditShoes = (request, response, next) ->
 	)
 
 updateShoesFlow = (request, response, next) ->
-	shoes = new Shoes() 
-	
 	step(
 		getShoes = ->
 			shoesId = request.params.id

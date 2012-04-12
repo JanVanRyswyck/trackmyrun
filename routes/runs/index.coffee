@@ -1,18 +1,15 @@
 step = require('step')
 errors = require('../../errors')
-Runs = require('../../data/runs')
-Shoes = require('../../data/shoes')
+runs = require('../../data/runs')
+shoes = require('../../data/shoes')
 
 exports.index = (request, response, next) -> 
 	year = determineYearFrom(request)
 	
 	step(
 		loadData = ->
-			runs = new Runs()
 			runs.getNumberOfRunsPerYear(request.user, @.parallel())
 			runs.getRunsByYear(request.user, year, @.parallel())
-
-			shoes = new Shoes()
 			shoes.getAll(request.user, @.parallel())
 
 		renderView = (error, numberOfRunsPerYear, runs, shoes) ->

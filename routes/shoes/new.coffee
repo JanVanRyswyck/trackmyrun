@@ -1,7 +1,7 @@
 step = require('step')
 _ = require('underscore')
 errors = require('../../errors')
-Shoes = require('../../data/shoes')
+shoes = require('../../data/shoes')
 
 exports.new = (request, response) ->
 	renderViewForNewShoes(request, response)
@@ -26,8 +26,6 @@ createShoesFlow = (request, response, next) ->
 	step(
 		createShoes = () ->
 			newPairOfShoes = mapNewShoesFrom(request.form, request.user)
-								
-			shoes = new Shoes()	
 			shoes.save(newPairOfShoes, @)
 
 		redirectToIndex = (error) ->

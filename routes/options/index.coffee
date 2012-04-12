@@ -1,6 +1,6 @@
 step = require('step')
 errors = require('../../errors')
-Options = require('../../data/options')
+options = require('../../data/options')
 
 exports.index = (request, response, next) -> 
 	renderViewForOptions(request, response, next)
@@ -13,12 +13,12 @@ exports.update = (request, response, next) ->
 
 renderViewForOptions = (request, response, next) ->
 	step(
-		getOptions = -> get(request.user, @)
-		renderView = (error, options) -> 
+		getOptions = -> options.get(request.user, @)
+		renderView = (error, currentOptions) -> 
 			if error
 				return next new errors.DataError('An error occured while loading data for the index page (options).', error)
 
-			if not options
+			if not currentOptions
 				return saveDefaultOptions(request.user, (error, defaultOptions)->
 					if error
 						return next new errors.PersistenceError('An error occured while creating default options in the data store.', error)
@@ -26,7 +26,7 @@ renderViewForOptions = (request, response, next) ->
 					renderTheView(response, request.user, defaultOptions)		
 				)
 							
-			renderTheView(response, request.user, options)	
+			renderTheView(response, request.user, currentOptions)	
 	)
 
 renderViewForInvalidOptions = (request, response) ->
@@ -38,14 +38,14 @@ renderViewForInvalidOptions = (request, response) ->
 
 updateOptionsFlow = (request, response, next) ->
 	step(
-		getOptions = -> get(request.user, @)
+		getOptions = -> options.get(request.user, @)
 
 		updateOptions = (error, currentOptions) ->
 			if error
 				return next new errors.DataError('An error occured while loading the data for updating the options.', error)
 
 			applyChangesTo(currentOptions, request.form)
-			save(currentOptions, @)
+			options.save(currentOptions, @)
 
 		redirectToOptions = (error) ->
 			if error
@@ -57,7 +57,7 @@ updateOptionsFlow = (request, response, next) ->
 saveDefaultOptions = (user, callback) ->
 	defaultOptions = createDefaultOptionsFor(user)
 
-	save(defaultOptions, (error, data) ->
+	options.save(defaultOptions, (error, data) ->
 		if error
 			return callback(error)
 
@@ -67,23 +67,15 @@ saveDefaultOptions = (user, callback) ->
 		callback(error, defaultOptions)
 	)
 
-get = (user, callback) ->
-	options = new Options()
-	options.get(user, callback)
-
-save = (currentOptions, callback) ->
-	options = new Options()
-	options.save(currentOptions, callback)
-
-renderTheView = (response, user, options, validationErrors = {}) ->
+renderTheView = (response, user, userOptions, validationErrors = {}) ->
 	response.render('options/index',
 		currentUser: user
-		options: options
+		options: userOptions
 		validationErrors: validationErrors
 	)
 
-applyChangesTo = (options, formData) ->
-	options.shoes.wearThreshold = formData.wearThreshold
+applyChangesTo = (currentOptions, formData) ->
+	currentOptions.shoes.wearThreshold = formData.wearThreshold
 
 mapOptionsForm = (formData) ->
 	shoes: 
