@@ -2,7 +2,7 @@ step = require('step')
 errors = require('../../errors')
 runs = require('../../data/runs')
 shoes = require('../../data/shoes')
-Calculator = require('../../services/calculator')
+calculator = require('../../services/calculator')
 
 exports.edit = (request, response, next) ->
 	renderViewForEditRun(request, response, next)
@@ -48,7 +48,7 @@ updateRunFlow = (request, response, next) ->
 				return next new errors.DataError('An error occured while loading the data for updating a run.', error)
 			
 			applyChangesTo(run, request.form)
-			run.speed = new Calculator().calculateSpeedFor(run)
+			run.speed = calculator.calculateSpeedFor(run)
 
 			runs.save(run, @)
 

@@ -3,7 +3,7 @@ _ = require('underscore')
 errors = require('../../errors')
 runs = require('../../data/runs')
 shoes = require('../../data/shoes')
-Calculator = require('../../services/calculator')
+calculator = require('../../services/calculator')
 
 exports.new = (request, response, next) ->
 	renderViewForNewRun(request, response, next)
@@ -38,7 +38,7 @@ createRunFlow = (request, response, next) ->
 	step(
 		createRun = () ->
 			newRun = mapNewRunFrom(request.form, request.user)
-			newRun.speed = new Calculator().calculateSpeedFor(newRun)
+			newRun.speed = calculator.calculateSpeedFor(newRun)
 	
 			runs.save(newRun, @)
 

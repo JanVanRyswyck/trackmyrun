@@ -14,7 +14,4 @@ exports.bootstrap = ->
 				username: couchDB.userName
 				password: couchDB.password 
 		)
-
-		# TODO Jan: Test (put in handler??)
-		# require('../handlers/changeshandler').bootstrap()
 	)
