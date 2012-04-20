@@ -29,6 +29,7 @@ registerAuthenticationRoutes = (application) ->
 
 	application.get('/auth/twitter', passport.authenticate('twitter'))
 	application.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/' }))
+	application.get('/logout', routes.signOut)
 
 registerApplicationRoutes = (application) ->
 	application.get('/', routes.index)
