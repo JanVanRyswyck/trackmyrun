@@ -45,6 +45,7 @@ mapNewShoesFrom = (formData, user) ->
 	color: formData.color
 	distance: 0
 	inUse: true
+	lastStatusUpdate: _.getCurrentDate()
 	name: formData.name
 	purchaseDate: formData.purchaseDate
 	size: formData.size

@@ -9,6 +9,7 @@ routes.runs = _.extend(require('../routes/runs'),
 routes.shoes = _.extend(require('../routes/shoes'),
 						require('../routes/shoes/new'),
 						require('../routes/shoes/edit'))
+routes.shoes.wear = require('../routes/shoes/wear')
 routes.options = require('../routes/options')
 
 validators = {}
@@ -43,6 +44,7 @@ registerApplicationRoutes = (application) ->
 	application.get('/shoes/new', routes.shoes.new)
 	application.put('/shoes/:id([a-z0-9]{32})', validators.shoes.validate, routes.shoes.update)
 	application.get('/shoes/:id([a-z0-9]{32})', routes.shoes.edit)
+	application.get('/shoes/wear/:id([a-z0-9]{32})', routes.shoes.wear.update)
 
 	application.get('/options', routes.options.index)
 	application.put('/options/:id([a-z0-9]{32})', validators.options.validate, routes.options.update)

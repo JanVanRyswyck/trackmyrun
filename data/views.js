@@ -29,7 +29,10 @@
       },
       "runsByYear": {
           "map": "function(document) {\n    if(document.type === 'run') {\n\tvar date = new  Date(document.date);\n\temit([document.user, date], document);\n    }\n  \t\n}"
-      }
+      },
+      "runsForShoes": {
+          "map": "function(document) {\n    if(document.type === 'run') {\n\temit([document.user, document.shoes], document);\n    }\n}"
+       }
    }
 }
 

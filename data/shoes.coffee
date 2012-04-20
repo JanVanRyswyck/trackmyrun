@@ -61,6 +61,7 @@ mapFrom = (document) ->
 	color: document.color
 	distance: document.distance
 	inUse: document.inUse
+	lastStatusUpdate: document.lastStatusUpdate
 	name: document.name
 	purchaseDate: document.purchaseDate
 	size: document.size

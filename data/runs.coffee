@@ -31,7 +31,19 @@ exports.getRunsByYear = (user, year, callback) ->
 	startDate = year + '-12-31'
 	endDate = year + '-01-01'
 
-	database().view('runs/runsByYear', { startkey: [user.id, startDate], endkey: [user.id, endDate], descending: true }
+	database().view('runs/runsByYear', { startkey: [user.id, startDate], endkey: [user.id, endDate], descending: true },
+		(error, response) ->
+			if error
+				return callback(error)
+
+			runs = _(response).map((document) -> 
+				mapFrom(document.value))
+
+			callback(error, runs)
+		)
+
+exports.getRunsForShoes = (user, shoesId, callback) ->
+	database().view('runs/runsForShoes', { key: [user.id, shoesId] },
 		(error, response) ->
 			if error
 				return callback(error)

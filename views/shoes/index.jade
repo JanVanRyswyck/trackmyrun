@@ -19,9 +19,10 @@
 				th Size
 				th Color
 				th Purchase Date
-				th Distance
 				th In use
+				th Distance
 				th Status
+				th
 				th
 		tbody
 			each shoe in shoes
@@ -30,8 +31,7 @@
 					td #{shoe.size}
 					td #{shoe.color}
 					td #{shoe.purchaseDate}
-					td #{shoe.distance}
-
+					
 					if shoe.inUse
 						td
 							input(type='checkbox', disabled, checked='checked')
@@ -39,6 +39,10 @@
 						td 
 							input(type='checkbox', disabled)
 
+					td #{shoe.distance}
 					td #{shoe.status} 
 					td 
 						a(href='/shoes/#{shoe.id}') Details
+					td
+						a(href='/shoes/wear/#{shoe.id}') Update wear 
+						p.help-block Last updated on #{shoe.lastStatusUpdate}	
