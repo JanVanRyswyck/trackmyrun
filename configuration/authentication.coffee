@@ -22,6 +22,8 @@ verifyUser = (token, tokenSecret, profile, done) ->
 			if error
 				return done(error)
 
+			console.log user
+
 			if !user
 				return done(null, false)
 
