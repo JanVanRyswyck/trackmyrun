@@ -2,7 +2,7 @@ passport = require('passport')
 configuration = require('./configuration')
 errors = require('../errors')
 TwitterStrategy = require('passport-twitter').Strategy
-users = require('../data/users')
+users = require('../data/users').users
 
 exports.bootstrap = ->
 	configuration.authenticationSettings((error, authentication) ->
@@ -21,8 +21,6 @@ verifyUser = (token, tokenSecret, profile, done) ->
 		(error, user) ->
 			if error
 				return done(error)
-
-			console.log user
 
 			if !user
 				return done(null, false)

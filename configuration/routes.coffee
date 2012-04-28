@@ -28,7 +28,7 @@ registerAuthenticationRoutes = (application) ->
 	application.all('/options*', routes.ensureAuthenticated)
 
 	application.get('/auth/twitter', passport.authenticate('twitter'))
-	application.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/' }))
+	application.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/auth/twitter' }))
 	application.get('/logout', routes.signOut)
 
 registerApplicationRoutes = (application) ->

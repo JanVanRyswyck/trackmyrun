@@ -1,7 +1,7 @@
 step = require('step')
 _ = require('underscore')
 errors = require('../../errors')
-shoes = require('../../data/shoes')
+shoes = require('../../data/shoes').shoes
 
 exports.new = (request, response) ->
 	renderViewForNewShoes(request, response)

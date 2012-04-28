@@ -3,12 +3,8 @@ connectionManager = require('./connectionmanager')
 class Options
 	_database = null
 
-	constructor: ->
-		connection = connectionManager.getConnection()
-		_database = connection.database('trackmyrun')
-
 	get: (user, callback) ->
-		_database.view('options/all', { startkey: [user.id], limit: 1 }, 
+		database().view('options/all', { startkey: [user.id], limit: 1 }, 
 			(error, response) ->
 				if error
 					return callback(error)
@@ -26,7 +22,7 @@ class Options
 		
 		prepareForPersistence(options)
 
-		_database.save(id, revision, options, 
+		database().save(id, revision, options, 
 			(error, response) -> 
 				if error
 					return callback(error)
@@ -36,6 +32,12 @@ class Options
 					revision: response.revision
 				)
 			)
+
+	database = () ->
+		return _database if _database
+
+		connection = connectionManager.getConnection()
+		return _database = connection.database('trackmyrun')
 
 	mapFrom = (document) ->
 		id: document._id
@@ -49,4 +51,4 @@ class Options
 		delete options.id
 		delete options.revision
 
-module.exports = new Options()
+exports.options = new Options()

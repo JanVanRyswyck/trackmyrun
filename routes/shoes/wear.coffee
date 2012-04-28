@@ -1,9 +1,9 @@
 step = require('step')
 _ = require('underscore')
 errors = require('../../errors')
-options = require('../../data/options')
-runs = require('../../data/runs')
-shoes = require('../../data/shoes')
+options = require('../../data/options').options
+runs = require('../../data/runs').runs
+shoes = require('../../data/shoes').shoes
 
 exports.update = (request, response, next) ->
 	shoesId = request.params.id
@@ -18,7 +18,6 @@ exports.update = (request, response, next) ->
 			if error
 				return next new errors.DataError('An error occured while loading the data for calculating the wear for a pair of shoes.', error)			
 
-			console.log options
 			calculateWearFor(pairOfShoes, runs, options.shoes.wearThreshold)
 			shoes.save(pairOfShoes, @)
 

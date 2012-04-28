@@ -4,12 +4,8 @@ _ = require('underscore')
 class Users
 	_database = null
 
-	constructor: ->
-		connection = connectionManager.getConnection()
-		_database = connection.database('trackmyrun')
-
 	getById: (id, callback) ->
-		_database.get(id, (error, response) ->
+		database().get(id, (error, response) ->
 			if error
 				return callback(error)
 			
@@ -18,7 +14,7 @@ class Users
 		)
 
 	getByName: (name, authority, callback) ->
-		_database.view('users/usersByName', { key: [name, authority] }, 
+		database().view('users/usersByName', { key: [name, authority] }, 
 			(error, response) ->
 				if error
 					return callback(error)
@@ -31,10 +27,16 @@ class Users
 				callback(null, user)	
 			)
 
+	database = () ->
+		return _database if _database
+
+		connection = connectionManager.getConnection()
+		return _database = connection.database('trackmyrun')
+
 	mapFrom = (document) ->
 		id: document._id
 		displayName: document.displayName
 
-module.exports = new Users()
+exports.users = new Users()
 
 	

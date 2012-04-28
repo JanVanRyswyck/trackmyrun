@@ -5,10 +5,6 @@ _ = require('underscore')
 class Runs
 	_database = null
 
-	constructor: ->
-		connection = connectionManager.getConnection()
-		_database = connection.database('trackmyrun')
-
 	getById: (id, callback) ->
 		_database.get(id, (error, response) ->
 			if error
@@ -19,7 +15,7 @@ class Runs
 		)
 
 	getNumberOfRunsPerYear: (user, callback) ->
-		_database.view('runs/runCountPerYear',  { startkey: [user.id, {}], endkey: [user.id], group: true, descending: true }, 
+		database().view('runs/runCountPerYear', { startkey: [user.id, {}], endkey: [user.id], group: true, descending: true }, 
 			(error, response) ->
 				if error
 					return callback(error)
@@ -36,7 +32,7 @@ class Runs
 		startDate = year + '-12-31'
 		endDate = year + '-01-01'
 
-		_database.view('runs/runsByYear', { startkey: [user.id, startDate], endkey: [user.id, endDate], descending: true },
+		database().view('runs/runsByYear', { startkey: [user.id, startDate], endkey: [user.id, endDate], descending: true },
 			(error, response) ->
 				if error
 					return callback(error)
@@ -48,7 +44,7 @@ class Runs
 			)
 
 	getRunsForShoes: (user, shoesId, callback) ->
-		_database.view('runs/runsForShoes', { key: [user.id, shoesId] },
+		database().view('runs/runsForShoes', { key: [user.id, shoesId] },
 			(error, response) ->
 				if error
 					return callback(error)
@@ -65,7 +61,7 @@ class Runs
 		
 		prepareForPersistence(run)
 
-		_database.save(id, revision, run, 
+		database().save(id, revision, run, 
 			(error, response) ->
 				if error
 					return callback(error)
@@ -75,6 +71,12 @@ class Runs
 					revision: response.revision
 				)
 			)
+
+	database = () ->
+		return _database if _database
+
+		connection = connectionManager.getConnection()
+		return _database = connection.database('trackmyrun')
 
 	mapFrom = (document) ->
 		id: document._id
@@ -93,4 +95,4 @@ class Runs
 		delete run.id
 		delete run.revision
 
-exports.modules = new Runs()
+exports.runs = new Runs()

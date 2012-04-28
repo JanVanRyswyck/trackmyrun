@@ -1,7 +1,7 @@
 step = require('step')
 errors = require('../errors')
-runs = require('../data/runs')
-shoes = require('../data/shoes')
+runs = require('../data/runs').runs
+shoes = require('../data/shoes').shoes
 
 exports.index = (request, response, next) -> 
 	step(

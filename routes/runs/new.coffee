@@ -1,8 +1,8 @@
 step = require('step')
 _ = require('underscore')
 errors = require('../../errors')
-runs = require('../../data/runs')
-shoes = require('../../data/shoes')
+runs = require('../../data/runs').runs
+shoes = require('../../data/shoes').shoes
 calculator = require('../../services/calculator')
 
 exports.new = (request, response, next) ->

@@ -1,6 +1,6 @@
 step = require('step')
 errors = require('../../errors')
-options = require('../../data/options')
+options = require('../../data/options').options
 
 exports.index = (request, response, next) -> 
 	renderViewForOptions(request, response, next)

@@ -1,6 +1,6 @@
 step = require('step')
 errors = require('../../errors')
-shoes = require('../../data/shoes')
+shoes = require('../../data/shoes').shoes
 
 exports.edit = (request, response, next) ->
 	renderViewForEditShoes(request, response, next)

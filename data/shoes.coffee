@@ -4,12 +4,8 @@ _ = require('underscore')
 class Shoes
 	_database = null
 
-	constructor: ->
-		connection = connectionManager.getConnection()
-		_database = connection.database('trackmyrun')
-
 	getById: (id, callback) ->
-		_database.get(id, (error, response) ->
+		database().get(id, (error, response) ->
 			if error
 				return callback(error)
 			
@@ -18,7 +14,7 @@ class Shoes
 		)
 
 	getAll: (user, callback) ->
-		_database.view('shoes/all', { startkey: [user.id, {}], endkey: [user.id], descending: true }, 
+		database().view('shoes/all', { startkey: [user.id, {}], endkey: [user.id], descending: true }, 
 			(error, response) ->
 				if error
 					return callback(error)
@@ -28,7 +24,7 @@ class Shoes
 			)
 
 	getShoesInUse: (user, callback) ->
-		_database.view('shoes/inUse', { startkey: [user.id, {}], endkey: [user.id], descending: true }, 
+		database().view('shoes/inUse', { startkey: [user.id, {}], endkey: [user.id], descending: true }, 
 			(error, response) ->
 				if error
 					return callback(error)
@@ -43,7 +39,7 @@ class Shoes
 
 		prepareForPersistence(shoes)
 
-		_database.save(id, revision, shoes, 
+		database().save(id, revision, shoes, 
 			(error, response) -> 
 				if error
 					return callback(error)
@@ -53,6 +49,12 @@ class Shoes
 					revision: response.revision
 				)
 			)
+
+	database = () ->
+		return _database if _database
+
+		connection = connectionManager.getConnection()
+		return _database = connection.database('trackmyrun')
 
 	mapFrom = (document) ->
 		id: document._id
@@ -72,4 +74,4 @@ class Shoes
 		delete shoes.id
 		delete shoes.revision
 
-exports.modules = new Shoes()
+exports.shoes = new Shoes()
