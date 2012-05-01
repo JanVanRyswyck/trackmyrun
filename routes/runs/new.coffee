@@ -23,7 +23,7 @@ renderViewForNewRun = (request, response, next) ->
 			if error 
 				return next new errors.DataError('An error occured while loading data for the new run page.', error)
 			
-			validationErrors = request.form.getErrors() if request.method == 'POST'
+			validationErrors = request.form.getErrors() if request.method is 'POST'
 			run = if validationErrors then mapNewRunFrom(response.locals(), request.user) else createDefaultRun()
 						
 			response.render('runs/new',

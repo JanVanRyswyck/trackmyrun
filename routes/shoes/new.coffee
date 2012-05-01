@@ -13,7 +13,7 @@ exports.create = (request, response, next) ->
 	createShoesFlow(request, response, next)
 
 renderViewForNewShoes = (request, response) ->
-	validationErrors = request.form.getErrors() if request.method == 'POST'
+	validationErrors = request.form.getErrors() if request.method is 'POST'
 	newPairOfShoes = if validationErrors then mapNewShoesFrom(response.locals(), request.user) else createDefaultShoes()
 
 	response.render('shoes/new',

@@ -29,8 +29,8 @@ class Runs
 			)
 
 	getRunsByYear: (user, year, callback) ->
-		startDate = year + '-12-31'
-		endDate = year + '-01-01'
+		startDate = "#{year}-12-31"
+		endDate = "#{year}-01-01"
 
 		database().view('runs/runsByYear', { startkey: [user.id, startDate], endkey: [user.id, endDate], descending: true },
 			(error, response) ->

@@ -9,7 +9,7 @@ class Options
 				if error
 					return callback(error)
 
-				if(0 == response.length)	
+				if(0 is response.length)	
 					return callback(error, null)
 
 				options = mapFrom(response[0].value)

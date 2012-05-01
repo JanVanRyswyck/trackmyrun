@@ -20,7 +20,7 @@ class Users
 					return callback(error)
 
 				if(_(response).isEmpty() || 1 != response.length)
-					errorMessage = 'The user with name "' + name + '" could not be found in the data store.'
+					errorMessage = "The user with name '#{name}' could not be found in the data store."
 					return callback(errorMessage, null)
 
 				user = mapFrom(response[0].value)

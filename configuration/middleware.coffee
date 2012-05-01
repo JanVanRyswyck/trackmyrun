@@ -10,11 +10,11 @@ exports.bootstrap = (application) ->
 	application.use(passport.initialize())
 	application.use(passport.session())
 	application.use(application.router)
-	application.use(express.static(__dirname + '/../public'))
+	application.use(express.static("#{__dirname}/../public"))
 	# application.use(express.logger())
 	# application.use(express.errorHandler(showStack: true, dumpExceptions: true));
 
 	application.helpers(viewHelpers)
 
 	application.set('view engine', 'jade')
-	application.set('showErrorDetails', application.settings.env == 'development')
+	application.set('showErrorDetails', application.settings.env is 'development')

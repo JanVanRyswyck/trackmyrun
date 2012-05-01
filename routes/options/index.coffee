@@ -33,7 +33,7 @@ renderViewForInvalidOptions = (request, response) ->
 	invalidOptions = mapOptionsForm(response.locals())
 	invalidOptions['id'] = request.params.id
 	
-	validationErrors = request.form.getErrors() if request.method == 'PUT'
+	validationErrors = request.form.getErrors() if request.method is 'PUT'
 	renderTheView(response, request.user, invalidOptions, validationErrors)
 
 updateOptionsFlow = (request, response, next) ->

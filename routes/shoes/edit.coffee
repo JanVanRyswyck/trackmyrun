@@ -13,7 +13,7 @@ exports.update = (request, response, next) ->
 
 renderViewForEditShoes = (request, response, next) ->
 	shoesId = request.params.id
-	validationErrors = request.form.getErrors() if request.method == 'PUT'
+	validationErrors = request.form.getErrors() if request.method is 'PUT'
 
 	step(
 		loadData = ->

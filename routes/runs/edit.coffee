@@ -15,7 +15,7 @@ exports.update = (request, response, next) ->
 
 renderViewForEditRun = (request, response, next) ->
 	runId = request.params.id
-	validationErrors = request.form.getErrors()	if request.method == 'PUT'
+	validationErrors = request.form.getErrors()	if request.method is 'PUT'
 
 	step(
 		loadData = ->
