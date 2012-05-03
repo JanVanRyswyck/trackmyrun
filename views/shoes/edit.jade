@@ -1,18 +1,18 @@
 .container
-	.content
+	.span10
 		.page-header
 			h1.inline-title Edit Pair of Shoes
 
-		form(method='post', action='/shoes/#{shoes.id}')
+		form.form-horizontal(method='post', action='/shoes/#{shoes.id}')
 			input(name='_method', value='PUT', type='hidden')
 			!=partial('shoefields', { shoes: shoes, validationErrors: validationErrors })
 
-			div(class='clearfix')
-				label(for='inUse') In use
-				.input
+			div(class='control-group')
+				label.control-label(for='inUse') In use
+				.controls
 					input#inUse(type='checkbox', name='inUse', checked=shoes.inUse)	
 
-			.actions
-				button.btn.primary(type='submit') Save
+			.form-actions
+				button.btn.btn-primary(type='submit') Save
 				| 
 				a.btn(href='/shoes') Cancel

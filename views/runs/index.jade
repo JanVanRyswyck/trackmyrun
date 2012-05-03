@@ -1,18 +1,18 @@
-.sidebar
-	.well
+.span3
+	.well.sidebar-nav
 		h4 Year
 		ul
 			each entry in numberOfRunsPerYear
 				li
 					a(href='/runs/#{entry.year}') #{entry.year} (#{entry.numberOfRuns})
 
-.content
+.span11
 	.page-header
 		h1.inline-title My Runs in #{year}
 		span.top-command-buttons
-			a.btn.primary(href='/runs/new') Add New Run
+			a.btn.btn-primary(href='/runs/new') Add New Run
 	
-	table.zebra-striped
+	table.table.table-bordered.table-striped
 		thead
 			tr
 				th Date

@@ -1,23 +1,23 @@
-.sidebar
-	.well
+.span3
+	.well.sidebar-nav
 		h4 Options
 		ul
 			li
 				a(href='/options') Shoes
 
-.content
+.span11
 	.page-header
 		h1 Shoes
 
-	form(method='post', action='/options/#{options.id}')
+	form.form-horizontal(method='post', action='/options/#{options.id}')
 		input(name='_method', value='PUT', type='hidden')
 		fieldset
-			div(class='clearfix' + (validationErrors.wearThreshold ? ' error' : ''))
-				label(for='wearThreshold') Wear threshold *
-				.input
+			div(class='control-group' + (validationErrors.wearThreshold ? ' error' : ''))
+				label.control-label(for='wearThreshold') Wear threshold *
+				.controls
 					input#wearThreshold(type='text', name='wearThreshold', class='span2', autocomplete='off', value=options.shoes.wearThreshold)
 					span.unit km
 					span.help-inline #{validationErrors.wearThreshold} 
 
-		.actions
-			button.btn.primary(type='submit') Save
+		.formactions
+			button.btn.btn-primary(type='submit') Save

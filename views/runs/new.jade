@@ -1,12 +1,12 @@
 .container
-	.content
+	.span10
 		.page-header
 			h1.inline-title New Run
 				
-		form(method='post', action='/runs')
+		form.form-horizontal(method='post', action='/runs')
 			!=partial('runfields', { run: run, pairsOfShoes: pairsOfShoes, validationErrors: validationErrors })
 
-			.actions
-				button.btn.primary(type='submit') Submit
+			.form-actions
+				button.btn.btn-primary(type='submit') Submit
 				| 
 				a.btn(href='/runs') Cancel

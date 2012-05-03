@@ -1,18 +1,18 @@
-.sidebar
-	.well
+.span3
+	.well.sidebar-nav
 		h4 Active Pair of Shoes
 		ul
 			each shoe in shoes
 				if shoe.inUse
 					li #{shoe.name}
 
-.content
+.span11
 	.page-header
 		h1.inline-title My Shoes
 		span.top-command-buttons
-			a.btn.primary(href='/shoes/new') Add New Pair of Shoes
+			a.btn.btn-primary(href='/shoes/new') Add New Pair of Shoes
 	
-	table.zebra-striped
+	table.table.table-bordered.table-striped
 		thead
 			tr
 				th Name
@@ -45,4 +45,4 @@
 						a(href='/shoes/#{shoe.id}') Details
 					td
 						a(href='/shoes/wear/#{shoe.id}') Update wear 
-						p.help-block Last updated on #{shoe.lastStatusUpdate}	
+						span.help-block Last updated on #{shoe.lastStatusUpdate}	

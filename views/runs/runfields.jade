@@ -1,20 +1,20 @@
 fieldset
-	div(class='clearfix' + (validationErrors.date ? ' error' : ''))
-		label(for='date') Date *
-		.input
+	div(class='control-group' + (validationErrors.date ? ' error' : ''))
+		label.control-label(for='date') Date *
+		.controls
 			input#date(type='text', name='date', class='span3', autocomplete='off', value=run.date)
 			span.help-inline #{validationErrors.date}
 
-	div(class='clearfix' + (validationErrors.distance ? ' error' : ''))
-		label(for='distance') Distance *
-		.input
+	div(class='control-group' + (validationErrors.distance ? ' error' : ''))
+		label.control-label(for='distance') Distance *
+		.controls
 			input#distance(type='text', name='distance', class='span2', autocomplete='off', value=run.distance)
 			span.unit km
 			span.help-inline #{validationErrors.distance} 
 
-	div(class='clearfix' + (validationErrors.duration ? ' error' : ''))
-		label Duration *
-		.input
+	div(class='control-group' + (validationErrors.duration ? ' error' : ''))
+		label.control-label Duration *
+		.controls
 			.inline-inputs
 				input#hours(type='text', name='durationHours', class='span1', autocomplete='off', value=run.duration.hours)
 				span.unit h
@@ -24,22 +24,22 @@ fieldset
 				span.unit sec
 				span.help-inline #{validationErrors.duration}
 
-	div(class='clearfix')
-		label(for='averageHeartRate') Avg. Heart Rate
-		.input
+	div(class='control-group')
+		label.control-label(for='averageHeartRate') Avg. Heart Rate
+		.controls
 			input#averageHeartRate(type='text', name='averageHeartRate', class='span2', autocomplete='off', value=run.averageHeartRate)
 			span.unit bpm
 
-	div(class='clearfix' + (validationErrors.shoes ? ' error' : ''))
-		label(for='shoes') Shoes *
-		.input
-			select#shoes(name='shoes', class='span4')
+	div(class='control-group' + (validationErrors.shoes ? ' error' : ''))
+		label.control-label(for='shoes') Shoes *
+		.controls
+			select#shoes(name='shoes', class='span3')
 				option(value = -1) Select a pair of shoes ...
 				each pairOfShoes in pairsOfShoes
 					option(value = pairOfShoes.id, selected=(pairOfShoes.id == run.shoes)) #{pairOfShoes.name}
 			span.help-inline #{validationErrors.shoes} 
 	
-	div(class='clearfix')
-		label(for='comments') Comments
-		.input
-			textarea#comments(name='comments', class='span8', rows='4', autocomplete='off') #{run.comments}
+	div(class='control-group')
+		label.control-label(for='comments') Comments
+		.controls
+			textarea#comments(name='comments', class='span6', rows='4', autocomplete='off') #{run.comments}

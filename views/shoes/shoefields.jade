@@ -1,23 +1,23 @@
 fieldset
-	div(class='clearfix' + (validationErrors.name ? ' error' : ''))
-		label(for='name') Name *
-		.input
+	div(class='control-group' + (validationErrors.name ? ' error' : ''))
+		label.control-label(for='name') Name *
+		.controls
 			input#name(type='text', name='name', class='span5', autocomplete='off', value=shoes.name)
 			span.help-inline #{validationErrors.name}
 
-	div(class='clearfix' + (validationErrors.size ? ' error' : ''))
-		label(for='size') Size *
-		.input
+	div(class='control-group' + (validationErrors.size ? ' error' : ''))
+		label.control-label(for='size') Size *
+		.controls
 			input#size(type='text', name='size', class='span2', autocomplete='off', value=shoes.size)
 			span.help-inline #{validationErrors.size} 
 
-	div(class='clearfix')
-		label(for='color') Color
-		.input
+	div(class='control-group')
+		label.control-label(for='color') Color
+		.controls
 			input#color(type='text', name='color', class='span3', autocomplete='off', value=shoes.color)
 
-	div(class='clearfix' + (validationErrors.purchaseDate ? ' error' : ''))
-		label(for='purchaseDate') Purchase Date *
-		.input
+	div(class='control-group' + (validationErrors.purchaseDate ? ' error' : ''))
+		label.control-label(for='purchaseDate') Purchase Date *
+		.controls
 			input#date(type='text', name='purchaseDate', class='span3', autocomplete='off', value=shoes.purchaseDate)
 			span.help-inline #{validationErrors.purchaseDate}
