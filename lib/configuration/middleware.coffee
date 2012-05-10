@@ -17,4 +17,5 @@ exports.bootstrap = (application) ->
 	application.helpers(viewHelpers)
 
 	application.set('view engine', 'jade')
+	application.set('views', "#{__dirname}/../views");
 	application.set('showErrorDetails', application.settings.env is 'development')

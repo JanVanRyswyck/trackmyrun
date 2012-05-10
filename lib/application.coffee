@@ -7,4 +7,5 @@ application = express.createServer()
 application.configure ->
 	bootstrapper.bootstrap(application)
 
-application.listen(2536)
+port = process.env.PORT or 2536;
+application.listen(port)
