@@ -11,7 +11,7 @@ class Runs
 				return callback(error)
 			
 			run = mapFrom(response)	
-			callback(error, run)
+			callback(null, run)
 		)
 
 	getNumberOfRunsPerYear: (user, callback) ->
@@ -25,7 +25,7 @@ class Runs
 					numberOfRuns: document.value
 				)
 			
-				callback(error, runsPerYear)
+				callback(null, runsPerYear)
 			)
 
 	getRunsByYear: (user, year, callback) ->
@@ -40,7 +40,7 @@ class Runs
 				runs = _(response).map((document) -> 
 					mapFrom(document.value))
 
-				callback(error, runs)
+				callback(null, runs)
 			)
 
 	getRunsForShoes: (user, shoesId, callback) ->
@@ -52,7 +52,7 @@ class Runs
 				runs = _(response).map((document) -> 
 					mapFrom(document.value))
 
-				callback(error, runs)
+				callback(null, runs)
 			)
 
 	save: (run, callback) ->
@@ -66,10 +66,19 @@ class Runs
 				if error
 					return callback(error)
 				
-				callback(error, 
+				callback(null, 
 					id: response.id
 					revision: response.revision
 				)
+			)
+
+	remove: (run, callback) ->
+		database().remove(run.id, run.revision, 
+			(error, response) ->
+				if error
+					return callback(error)
+
+				callback(null)
 			)
 
 	database = () ->

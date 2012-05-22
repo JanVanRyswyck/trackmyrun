@@ -5,7 +5,8 @@ routes = _.extend(require('../routes'),
 		 		  require('../routes/authentication'))
 routes.runs = _.extend(require('../routes/runs'), 
 					   require('../routes/runs/new'),
-					   require('../routes/runs/edit'))
+					   require('../routes/runs/edit'),
+					   require('../routes/runs/delete'))
 routes.shoes = _.extend(require('../routes/shoes'),
 						require('../routes/shoes/new'),
 						require('../routes/shoes/edit'))
@@ -39,13 +40,14 @@ registerApplicationRoutes = (application) ->
 	application.get('/runs/:year([0-9]{4})?', routes.runs.index)
 	application.put('/runs/:id([a-z0-9]{32})', validators.run.validate, routes.runs.update)
 	application.get('/runs/:id([a-z0-9]{32})', routes.runs.edit)
+	application.get('/runs/:id([a-z0-9]{32})/delete', routes.runs.delete)
 	
 	application.get('/shoes', routes.shoes.index)
 	application.post('/shoes', validators.shoes.validate, routes.shoes.create)
 	application.get('/shoes/new', routes.shoes.new)
 	application.put('/shoes/:id([a-z0-9]{32})', validators.shoes.validate, routes.shoes.update)
 	application.get('/shoes/:id([a-z0-9]{32})', routes.shoes.edit)
-	application.get('/shoes/wear/:id([a-z0-9]{32})', routes.shoes.wear.update)
+	application.get('/shoes/:id([a-z0-9]{32})/wear', routes.shoes.wear.update)
 
 	application.get('/options', routes.options.index)
 	application.put('/options/:id([a-z0-9]{32})', validators.options.validate, routes.options.update)

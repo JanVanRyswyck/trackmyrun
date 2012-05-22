@@ -10,7 +10,7 @@ class Shoes
 				return callback(error)
 			
 			shoes = mapFrom(response)	
-			callback(error, shoes)
+			callback(null, shoes)
 		)
 
 	getAll: (user, callback) ->
@@ -20,7 +20,7 @@ class Shoes
 					return callback(error)
 
 				shoesInUse = _(response).map((document) -> mapFrom(document.value))
-				callback(error, shoesInUse)
+				callback(null, shoesInUse)
 			)
 
 	getShoesInUse: (user, callback) ->
@@ -30,7 +30,7 @@ class Shoes
 					return callback(error)
 
 				shoesInUse = _(response).map((document) -> mapFrom(document.value))
-				callback(error, shoesInUse)
+				callback(null, shoesInUse)
 			)
 
 	save: (shoes, callback) ->
@@ -44,7 +44,7 @@ class Shoes
 				if error
 					return callback(error)
 				
-				callback(error, 
+				callback(null, 
 					id: response.id
 					revision: response.revision
 				)

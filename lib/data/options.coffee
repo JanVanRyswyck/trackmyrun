@@ -13,7 +13,7 @@ class Options
 					return callback(error, null)
 
 				options = mapFrom(response[0].value)
-				callback(error, options)
+				callback(null, options)
 			)
 
 	save: (options, callback) ->
@@ -27,7 +27,7 @@ class Options
 				if error
 					return callback(error)
 				
-				callback(error, 
+				callback(null, 
 					id: response.id
 					revision: response.revision
 				)
